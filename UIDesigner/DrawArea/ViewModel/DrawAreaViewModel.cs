@@ -75,6 +75,9 @@ namespace DrawArea
 
             ltb.txb.Text = "Label";
 
+            ltb.Block_Row = row;
+            ltb.Block_Col = col;
+
             Size s = MeasureTextSize(ltb.txb.Text, ltb);
             numberOfBlocksLabel = (int)Math.Ceiling((double)(Math.Ceiling(s.Width) / WIDTH));
             numberOfBlocksBox = blockWidth - numberOfBlocksLabel;
@@ -151,9 +154,40 @@ namespace DrawArea
             int boxHeight = (int)ltb.txt.Height;
             int widthDiff = blockWidth - boxWidth;
 
+            int blockRow = ltb.Block_Row;
+            int blockCol = ltb.Block_Col;
+
             if (e.Key == Key.Delete)
             {
                 myGrid.Children.Remove(ltb);
+                return;
+            }
+            if ((Keyboard.IsKeyDown(Key.RightCtrl)) && (Keyboard.IsKeyDown(Key.Up)))
+            {
+                blockRow -= 1;
+                Grid.SetRow(ltb, blockRow);
+                ltb.Block_Row -= 1;
+                return;
+            }
+            if ((Keyboard.IsKeyDown(Key.RightCtrl)) && (Keyboard.IsKeyDown(Key.Down)))
+            {
+                blockRow += 1;
+                Grid.SetRow(ltb, blockRow);
+                ltb.Block_Row += 1;
+                return;
+            }
+            if ((Keyboard.IsKeyDown(Key.RightCtrl)) && (Keyboard.IsKeyDown(Key.Left)))
+            {
+                blockCol -= ((widthDiff / WIDTH) + 1);
+                Grid.SetColumn(ltb, blockCol);
+                ltb.Block_Col -= 1;
+                return;
+            }
+            if ((Keyboard.IsKeyDown(Key.RightCtrl)) && (Keyboard.IsKeyDown(Key.Right)))
+            {
+                blockCol += (-(widthDiff / WIDTH) + 1);
+                Grid.SetColumn(ltb, blockCol);
+                ltb.Block_Col += 1;
                 return;
             }
 
