@@ -19,7 +19,7 @@ namespace DrawArea
         const int WIDTH = 20;
         const int HEIGHT = 20;
         Grid myGrid;
-        private void getGridRowCol(Grid myGrid, MouseButtonEventArgs e)
+        private void doSomething(Grid myGrid, MouseButtonEventArgs e)
         {
             var grid = myGrid;
             if (grid != null)
@@ -203,7 +203,7 @@ namespace DrawArea
         public void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e, Grid myGrid)
         {
             this.myGrid = myGrid;
-            getGridRowCol(this.myGrid, e);
+            doSomething(this.myGrid, e);
             createBlock(selectedRowIndex, selectedColumnIndex, 4, 1);
         }
     }
