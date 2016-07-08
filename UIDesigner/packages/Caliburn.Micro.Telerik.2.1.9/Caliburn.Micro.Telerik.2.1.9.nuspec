@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Caliburn.Micro.Telerik</id>
+    <version>2.1.9</version>
+    <title>Caliburn.Micro.Telerik</title>
+    <authors>Valeriu Caraulean</authors>
+    <owners>Valeriu Caraulean</owners>
+    <projectUrl>https://github.com/vcaraulean/Caliburn.Micro.Telerik</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Integration of Caliburn.Micro with Telerik's controls: conventions, IWindowManager implementation (TelerikWindowManager), extensions methods to IWindowManager: Alert, Confirm, Prompt. 
+      Target frameworks: Silverlight 5.0, WPF 4.
+      Source code with sample projects available at http://github.com/vcaraulean/Caliburn.Micro.Telerik .</description>
+    <summary>Caliburn.Micro conventions for Telerik controls</summary>
+    <releaseNotes>Updated to Caliburn.Micro 1.5.2</releaseNotes>
+    <tags>Caliburn.Micro Telerik Silverlight WPF SL40 SL50</tags>
+    <dependencies>
+      <dependency id="Caliburn.Micro" version="1.5.2" />
+    </dependencies>
+  </metadata>
+</package>
