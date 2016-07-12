@@ -47,6 +47,12 @@
     <Reference Include="Caliburn.Micro.Telerik">
       <HintPath>..\packages\Caliburn.Micro.Telerik.2.1.9\lib\net40\Caliburn.Micro.Telerik.dll</HintPath>
     </Reference>
+    <Reference Include="DrawAreaToJSON">
+      <HintPath>..\DrawAreaToJSON\bin\Debug\DrawAreaToJSON.dll</HintPath>
+    </Reference>
+    <Reference Include="JsonToDML">
+      <HintPath>..\JsonToDML\bin\Debug\JsonToDML.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Practices.Prism.Composition">
       <HintPath>..\packages\Prism.Composition.5.0.0\lib\NET45\Microsoft.Practices.Prism.Composition.dll</HintPath>

@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Microsoft.Practices.Prism.Commands;
+using DrawAreaToJSON;
 
 namespace DrawArea
 {
@@ -18,7 +19,11 @@ namespace DrawArea
         int selectedColumnIndex = -1, selectedRowIndex = -1;
         const int WIDTH = 20;
         const int HEIGHT = 20;
+
         Grid myGrid;
+        static DrawAreaUiElementList daList = new DrawAreaUiElementList();
+        DrawAreaUiElement daElement;
+
         private void doSomething(Grid myGrid, MouseButtonEventArgs e)
         {
             var grid = myGrid;
@@ -72,11 +77,11 @@ namespace DrawArea
             int numberOfBlocksLabel;
             int numberOfBlocksBox;
             LabelTextBox ltb = new LabelTextBox();
-
             ltb.txb.Text = "Label";
 
             ltb.Block_Row = row;
             ltb.Block_Col = col;
+            ltb.Id = System.DateTime.Now.Millisecond.ToString();
 
             Size s = MeasureTextSize(ltb.txb.Text, ltb);
             numberOfBlocksLabel = (int)Math.Ceiling((double)(Math.Ceiling(s.Width) / WIDTH));
@@ -102,6 +107,10 @@ namespace DrawArea
             Grid.SetColumnSpan(ltb, ((int)(ltb.Width) / WIDTH));
             Grid.SetRowSpan(ltb, ((int)(ltb.Height) / HEIGHT));
             myGrid.Children.Add(ltb);
+
+            daElement = new DrawAreaUiElement(ltb.Id, "INPUT_BLOCK", ltb.Block_Row.ToString(), ltb.Block_Col.ToString(), "BLOCK", "TOKEN", "", "#TARGET", "#SOURCE", "", ltb.txt.Width.ToString(), "12", ltb.txt.Height.ToString());
+            daList.addUIElementToUIElementList(daElement);
+            DrawToJSON.DrawAreaToJSON(daList.UIL);
         }
 
         //private void modifyBlock(LabelTextBox ltb)
@@ -160,6 +169,7 @@ namespace DrawArea
             if (e.Key == Key.Delete)
             {
                 myGrid.Children.Remove(ltb);
+                ModifyElement(ltb.Id,"DELETE",0,0,0,0);
                 return;
             }
             if ((Keyboard.IsKeyDown(Key.RightCtrl)) && (Keyboard.IsKeyDown(Key.Up)))
@@ -167,6 +177,7 @@ namespace DrawArea
                 blockRow -= 1;
                 Grid.SetRow(ltb, blockRow);
                 ltb.Block_Row -= 1;
+                ModifyElement(ltb.Id, "", ltb.Block_Row,0,0,0);
                 return;
             }
             if ((Keyboard.IsKeyDown(Key.RightCtrl)) && (Keyboard.IsKeyDown(Key.Down)))
@@ -174,6 +185,7 @@ namespace DrawArea
                 blockRow += 1;
                 Grid.SetRow(ltb, blockRow);
                 ltb.Block_Row += 1;
+                ModifyElement(ltb.Id, "", ltb.Block_Row, 0, 0, 0);
                 return;
             }
             if ((Keyboard.IsKeyDown(Key.RightCtrl)) && (Keyboard.IsKeyDown(Key.Left)))
@@ -181,6 +193,7 @@ namespace DrawArea
                 blockCol -= ((widthDiff / WIDTH) + 1);
                 Grid.SetColumn(ltb, blockCol);
                 ltb.Block_Col -= 1;
+                ModifyElement(ltb.Id, "", 0, ltb.Block_Col, 0, 0);
                 return;
             }
             if ((Keyboard.IsKeyDown(Key.RightCtrl)) && (Keyboard.IsKeyDown(Key.Right)))
@@ -188,6 +201,7 @@ namespace DrawArea
                 blockCol += (-(widthDiff / WIDTH) + 1);
                 Grid.SetColumn(ltb, blockCol);
                 ltb.Block_Col += 1;
+                ModifyElement(ltb.Id, "", 0, ltb.Block_Col, 0, 0);
                 return;
             }
 
@@ -232,6 +246,34 @@ namespace DrawArea
 
             Grid.SetColumnSpan(((LabelTextBox)sender).txt, boxWidth / WIDTH);
             Grid.SetRowSpan(((LabelTextBox)sender).txt, boxHeight / HEIGHT);
+
+            ModifyElement(ltb.Id, "", 0, 0, boxWidth, boxHeight);
+        }
+
+        public void ModifyElement(string blockId, string mode,int row,int col,int len,int height)
+        {
+            foreach (var element in daList.UIL)
+            {
+                if (element.ID == blockId)
+                {
+                    if(mode == "DELETE")
+                        daList.removeUIElementToUIElementList(element);
+                    else
+                    {
+                        if (row > 0)
+                            element.Row = row.ToString();
+                        else if (col > 0)
+                            element.Col = col.ToString();
+                        else if ((len > 0) || height > 0)
+                        {
+                            element.Len = len.ToString();
+                            element.Height = height.ToString();
+                        }
+                    }
+                    break;
+                }
+            }
+            DrawToJSON.DrawAreaToJSON(daList.UIL);
         }
 
         public void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e, Grid myGrid)
