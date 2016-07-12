@@ -44,5 +44,6 @@ C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UI
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\DrawAreaToJSON\bin\Debug\Microsoft.Practices.ServiceLocation.pdb
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\DrawAreaToJSON\bin\Debug\Microsoft.Practices.ServiceLocation.xml
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\DrawAreaToJSON\bin\Debug\Newtonsoft.Json.xml
+C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\DrawAreaToJSON\obj\Debug\DrawAreaToJSON.csprojResolveAssemblyReference.cache
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\DrawAreaToJSON\obj\Debug\DrawAreaToJSON.dll
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\DrawAreaToJSON\obj\Debug\DrawAreaToJSON.pdb
