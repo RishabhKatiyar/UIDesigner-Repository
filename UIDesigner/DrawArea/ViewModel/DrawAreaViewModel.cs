@@ -14,8 +14,10 @@ using DrawAreaToJSON;
 
 namespace DrawArea
 {
+      
     public class DrawAreaViewModel : ViewModelBase
     {
+        static int blockNameCount = 0;
         int selectedColumnIndex = -1, selectedRowIndex = -1;
         const int WIDTH = 20;
         const int HEIGHT = 20;
@@ -107,7 +109,12 @@ namespace DrawArea
             Grid.SetRowSpan(ltb, ((int)(ltb.Height) / HEIGHT));
             myGrid.Children.Add(ltb);
 
-            daElement = new DrawAreaUiElement(ltb.Id, "INPUT_BLOCK", ltb.Block_Row.ToString(), ltb.Block_Col.ToString(), "BLOCK", "TOKEN", "", "#TARGET", "#SOURCE", "", ltb.txt.Width.ToString(), "12", ltb.txt.Height.ToString());
+            var blockName = "BLOCK";
+          
+            blockNameCount = blockNameCount + 1;
+            blockName = "BLOCK_" + blockNameCount;
+
+            daElement = new DrawAreaUiElement(ltb.Id, "INPUT_BLOCK", ltb.Block_Row.ToString(), ltb.Block_Col.ToString(), blockName, "TOKEN", "", "#TARGET", "#SOURCE", "", ltb.txt.Width.ToString(), "12", ltb.txt.Height.ToString());
             daList.addUIElementToUIElementList(daElement);
             DrawToJSON.DrawAreaToJSON(daList.UIL);
 
