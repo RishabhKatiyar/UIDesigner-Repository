@@ -4,12 +4,12 @@
         xmlns:vm="clr-namespace:DrawArea"
         xmlns:control="clr-namespace:DrawArea.View" WindowStartupLocation="CenterScreen"
         Title="Draw Area" Height="541" Width="800" 
-        DataContext="{DynamicResource DrawAreaViewModel}" MouseLeftButtonDown="Window_MouseLeftButtonDown_1">
+        DataContext="{DynamicResource DrawAreaViewModel}">
     <Window.Resources>
         <vm:DrawAreaViewModel x:Key="DrawAreaViewModel"/>
     </Window.Resources>
-    <StackPanel Name="stk">
-        <Grid Name="myGrid" ShowGridLines="True" Height="500" HorizontalAlignment="Center">
+    <StackPanel Name="stk" >
+        <Grid Background="#FFEAF2FB" Name="myGrid" ShowGridLines="True" Height="500" HorizontalAlignment="Center" MouseLeftButtonDown="myGrid_MouseLeftButtonDown">
             <Grid.RowDefinitions>
                 <RowDefinition Height="20"/>
                 <RowDefinition Height="20"/>
