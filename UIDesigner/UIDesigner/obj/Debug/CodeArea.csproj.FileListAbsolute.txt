@@ -75,3 +75,4 @@ C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UI
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\UIDesigner\obj\Debug\CodeArea.csproj.GenerateResource.Cache
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\UIDesigner\obj\Debug\UIDesigner.exe
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\UIDesigner\obj\Debug\UIDesigner.pdb
+C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\UIDesigner\obj\Debug\CodeArea.csprojResolveAssemblyReference.cache

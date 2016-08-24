@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="600" Width="600" WindowStartupLocation="Manual">
     <Grid>
-        <TextBlock
+        <TextBox
             Name="codeArea"
 		   Margin="10,10,10,10"
 		   TextWrapping="Wrap"

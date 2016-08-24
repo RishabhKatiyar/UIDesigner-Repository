@@ -13,17 +13,26 @@ using Microsoft.Practices.Prism.Commands;
 using DrawAreaToJSON;
 
 namespace DrawArea
-{
-      
-    public class DrawAreaViewModel : ViewModelBase
+{   
+    public partial class DrawAreaViewController
     {
+        Grid myGrid;
+        StackPanel stk;
+        InputBlockProperties ibp;
+        OutputBlockProperties obp;
         static int blockNameCount = 0;
         int selectedColumnIndex = -1, selectedRowIndex = -1;
         const int WIDTH = 20;
         const int HEIGHT = 20;
-        Grid myGrid;
         static DrawAreaUiElementList daList = new DrawAreaUiElementList();
         DrawAreaUiElement daElement;
+        public void OnMouseLeftButtonDown(MouseButtonEventArgs e, Grid myGrid, StackPanel stk)
+        {
+            this.myGrid = myGrid;
+            this.stk = stk;
+            getGridRowCol(this.myGrid, e);
+            createBlock(selectedRowIndex, selectedColumnIndex, 4, 1);
+        }
         private void getGridRowCol(Grid myGrid, MouseButtonEventArgs e)
         {
             var grid = myGrid;
@@ -56,22 +65,6 @@ namespace DrawArea
             }
             var pos1 = e.GetPosition(grid);
         }
-
-        public static Size MeasureTextSize(string text, LabelTextBox ob)
-        {
-            FontFamily fontFamily = ob.txb.FontFamily;
-            FontStyle fontStyle = ob.txb.FontStyle;
-            FontWeight fontWeight = ob.txb.FontWeight;
-            FontStretch fontStretch = ob.txb.FontStretch;
-            double fontSize = ob.txb.FontSize;
-            FormattedText ft = new FormattedText(text,
-                                                 CultureInfo.CurrentCulture,
-                                                 FlowDirection.LeftToRight,
-                                                 new Typeface(fontFamily, fontStyle, fontWeight, fontStretch),
-                                                 fontSize,
-                                                 Brushes.Black);
-            return new Size(ft.Width, ft.Height);
-        }
         private void createBlock(int row, int col, int blockWidth, int blockHeight)
         {
             int numberOfBlocksLabel;
@@ -79,7 +72,6 @@ namespace DrawArea
             LabelTextBox ltb = new LabelTextBox();
 
             ltb.txb.Text = "Label";
-
             ltb.Block_Row = row;
             ltb.Block_Col = col;
             ltb.Id = System.DateTime.Now.Millisecond.ToString();
@@ -100,9 +92,10 @@ namespace DrawArea
             ltb.txt.BorderBrush = Brushes.Red;
             ltb.txt.BorderThickness = new Thickness(2, 2, 2, 2);
 
-            ltb.txt.TextChanged += block_Text_Change;
-            ltb.PreviewKeyDown += select_Input_Block;
-
+            ltb.txt.TextChanged += blockTextChange;
+            ltb.PreviewKeyDown += selectInputBlock;
+            ltb.PreviewMouseDown += mouseClickInputBlock;
+            
             Grid.SetRow(ltb, row);
             Grid.SetColumn(ltb, col - numberOfBlocksLabel);
             Grid.SetColumnSpan(ltb, ((int)(ltb.Width) / WIDTH));
@@ -110,7 +103,6 @@ namespace DrawArea
             myGrid.Children.Add(ltb);
 
             var blockName = "BLOCK";
-          
             blockNameCount = blockNameCount + 1;
             blockName = "BLOCK_" + blockNameCount;
 
@@ -119,13 +111,28 @@ namespace DrawArea
             DrawToJSON.DrawAreaToJSON(daList.UIL);
 
         }
-        private void block_Text_Change(object sender, RoutedEventArgs e)
+        public static Size MeasureTextSize(string text, LabelTextBox ob)
+        {
+            FontFamily fontFamily = ob.txb.FontFamily;
+            FontStyle fontStyle = ob.txb.FontStyle;
+            FontWeight fontWeight = ob.txb.FontWeight;
+            FontStretch fontStretch = ob.txb.FontStretch;
+            double fontSize = ob.txb.FontSize;
+            FormattedText ft = new FormattedText(text,
+                                                 CultureInfo.CurrentCulture,
+                                                 FlowDirection.LeftToRight,
+                                                 new Typeface(fontFamily, fontStyle, fontWeight, fontStretch),
+                                                 fontSize,
+                                                 Brushes.Black);
+            return new Size(ft.Width, ft.Height);
+        }
+        private void blockTextChange(object sender, RoutedEventArgs e)
         {
             LabelTextBox ltb = new LabelTextBox();
             ltb.txt = (TextBox)sender;
             ltb.txb.Text = ltb.txt.Text;
         }
-        private void select_Input_Block(object sender, KeyEventArgs e)
+        private void selectInputBlock(object sender, KeyEventArgs e)
         {
             LabelTextBox ltb = (LabelTextBox)sender;
             int blockWidth = (int)ltb.Width;
@@ -140,7 +147,7 @@ namespace DrawArea
             if (e.Key == Key.Delete)
             {
                 myGrid.Children.Remove(ltb);
-                ModifyElement(ltb.Id, "DELETE", 0, 0, 0, 0);
+                modifyElement(ltb.Id, "DELETE", 0, 0, 0, 0);
                 return;
             }
             if ((Keyboard.IsKeyDown(Key.RightCtrl)) && (Keyboard.IsKeyDown(Key.Up)))
@@ -148,7 +155,7 @@ namespace DrawArea
                 blockRow -= 1;
                 Grid.SetRow(ltb, blockRow);
                 ltb.Block_Row -= 1;
-                ModifyElement(ltb.Id, "", ltb.Block_Row, 0, 0, 0);
+                modifyElement(ltb.Id, "", ltb.Block_Row, 0, 0, 0);
                 return;
             }
             if ((Keyboard.IsKeyDown(Key.RightCtrl)) && (Keyboard.IsKeyDown(Key.Down)))
@@ -156,7 +163,7 @@ namespace DrawArea
                 blockRow += 1;
                 Grid.SetRow(ltb, blockRow);
                 ltb.Block_Row += 1;
-                ModifyElement(ltb.Id, "", ltb.Block_Row, 0, 0, 0);
+                modifyElement(ltb.Id, "", ltb.Block_Row, 0, 0, 0);
                 return;
             }
             if ((Keyboard.IsKeyDown(Key.RightCtrl)) && (Keyboard.IsKeyDown(Key.Left)))
@@ -164,7 +171,7 @@ namespace DrawArea
                 blockCol -= ((widthDiff / WIDTH) + 1);
                 Grid.SetColumn(ltb, blockCol);
                 ltb.Block_Col -= 1;
-                ModifyElement(ltb.Id, "", 0, ltb.Block_Col, 0, 0);
+                modifyElement(ltb.Id, "", 0, ltb.Block_Col, 0, 0);
                 return;
             }
             if ((Keyboard.IsKeyDown(Key.RightCtrl)) && (Keyboard.IsKeyDown(Key.Right)))
@@ -172,7 +179,7 @@ namespace DrawArea
                 blockCol += (-(widthDiff / WIDTH) + 1);
                 Grid.SetColumn(ltb, blockCol);
                 ltb.Block_Col += 1;
-                ModifyElement(ltb.Id, "", 0, ltb.Block_Col, 0, 0);
+                modifyElement(ltb.Id, "", 0, ltb.Block_Col, 0, 0);
                 return;
             }
 
@@ -217,9 +224,39 @@ namespace DrawArea
 
             Grid.SetColumnSpan(((LabelTextBox)sender).txt, boxWidth / WIDTH);
             Grid.SetRowSpan(((LabelTextBox)sender).txt, boxHeight / HEIGHT);
-            ModifyElement(ltb.Id, "", 0, 0, boxWidth, boxHeight);
+            modifyElement(ltb.Id, "", 0, 0, boxWidth, boxHeight);
         }
-        public void ModifyElement(string blockId, string mode, int row, int col, int len, int height)
+        private void mouseClickInputBlock(object sender, MouseEventArgs e)
+        {
+            DrawAreaUiElement Element = daElement;
+            LabelTextBox ltb = (LabelTextBox)sender;
+            foreach (var element in daList.UIL)
+            {
+                if (element.ID == ltb.Id)
+                {
+                    Element = element;
+                    break;
+                }
+            }
+
+            string dmlKeyword = Element.DMLKeyword;
+            if(dmlKeyword == "INPUT_BLOCK")
+            {
+                ibp = new InputBlockProperties();
+                ibp.blockName = Element.BlockName;
+                ibp.row = Element.Row.ToString();
+                ibp.column = Element.Col.ToString();
+                stk.Children.RemoveAt(2);
+                stk.Children.Add(ibp);
+            }
+            else if (dmlKeyword == "OUTPUT_BLOCK")
+            {
+                obp = new OutputBlockProperties();
+                stk.Children.RemoveAt(2);
+                stk.Children.Add(obp);
+            }
+        }
+        public void modifyElement(string blockId, string mode, int row, int col, int len, int height)
         {
             foreach (var element in daList.UIL)
             {
@@ -243,12 +280,6 @@ namespace DrawArea
                 }
             }
             DrawToJSON.DrawAreaToJSON(daList.UIL);
-        }
-        public void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e, Grid myGrid)
-        {
-            this.myGrid = myGrid;
-            getGridRowCol(this.myGrid, e);
-            createBlock(selectedRowIndex, selectedColumnIndex, 4, 1);
         }
     }
 }

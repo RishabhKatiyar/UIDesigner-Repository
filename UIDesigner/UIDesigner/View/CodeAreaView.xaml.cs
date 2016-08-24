@@ -56,6 +56,7 @@ namespace UIDesigner
             string json;
             try
             {
+                //TODO store path in xml file whose path will be saved in registry
                 using (StreamReader r = new StreamReader("c:\\temp\\UIDesign.json"))
                 {
                     json = r.ReadToEnd();

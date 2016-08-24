@@ -28,9 +28,7 @@ namespace DrawArea
         }
         private void myGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            DrawAreaViewModel ob = new DrawAreaViewModel(); ob.OnMouseLeftButtonDown(sender, e, myGrid);
+            DrawAreaViewController ob = new DrawAreaViewController(); ob.OnMouseLeftButtonDown(e, myGrid, stk);
         }
-
-        //ws
     }
 }
