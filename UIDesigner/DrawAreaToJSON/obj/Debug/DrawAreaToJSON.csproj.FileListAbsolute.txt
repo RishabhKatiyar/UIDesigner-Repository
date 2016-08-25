@@ -47,3 +47,13 @@ C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UI
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\DrawAreaToJSON\obj\Debug\DrawAreaToJSON.csprojResolveAssemblyReference.cache
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\DrawAreaToJSON\obj\Debug\DrawAreaToJSON.dll
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\DrawAreaToJSON\obj\Debug\DrawAreaToJSON.pdb
+C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\DrawAreaToJSON\bin\Debug\DrawAreaToJSON.dll.config
+C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\DrawAreaToJSON\bin\Debug\GalaSoft.MvvmLight.dll
+C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\DrawAreaToJSON\bin\Debug\GalaSoft.MvvmLight.Extras.dll
+C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\DrawAreaToJSON\bin\Debug\GalaSoft.MvvmLight.Platform.dll
+C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\DrawAreaToJSON\bin\Debug\GalaSoft.MvvmLight.pdb
+C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\DrawAreaToJSON\bin\Debug\GalaSoft.MvvmLight.xml
+C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\DrawAreaToJSON\bin\Debug\GalaSoft.MvvmLight.Extras.pdb
+C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\DrawAreaToJSON\bin\Debug\GalaSoft.MvvmLight.Extras.xml
+C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\DrawAreaToJSON\bin\Debug\GalaSoft.MvvmLight.Platform.pdb
+C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\DrawAreaToJSON\bin\Debug\GalaSoft.MvvmLight.Platform.xml
