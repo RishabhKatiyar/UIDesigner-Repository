@@ -121,6 +121,7 @@
     <Compile Include="ViewModel\DrawAreaViewModel.cs" />
     <Compile Include="Galasoft.MvvmLight\MainViewModel.cs" />
     <Compile Include="Galasoft.MvvmLight\ViewModelLocator.cs" />
+    <Compile Include="UIElementClasses\InputBlockPropertiesClass.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="View\InputBlockProperties.xaml.cs">
       <DependentUpon>InputBlockProperties.xaml</DependentUpon>

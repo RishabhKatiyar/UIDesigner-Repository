@@ -14,29 +14,34 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="150"/>
         </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" HorizontalContentAlignment="Right">ID</Label>
+        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding uID, Mode=TwoWay}" IsEnabled="False"/>
         
-        <Label Grid.Row="0" Grid.Column="0" HorizontalContentAlignment="Right">Block Name</Label>
-        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding blockName, Mode=TwoWay}"/>
+        <Label Grid.Row="1" Grid.Column="0" HorizontalContentAlignment="Right">Block Name</Label>
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding blockName, Mode=TwoWay}"/>
+        
+        <Label Grid.Row="2" Grid.Column="0" HorizontalContentAlignment="Right">Row</Label>
+        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Row, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-        <Label Grid.Row="1" Grid.Column="0" HorizontalContentAlignment="Right">Row</Label>
-        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding row, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <Label Grid.Row="3" Grid.Column="0" HorizontalContentAlignment="Right">Column</Label>
+        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Col, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-        <Label Grid.Row="2" Grid.Column="0" HorizontalContentAlignment="Right">Column</Label>
-        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding row, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-
-        <Label Grid.Row="3" Grid.Column="0" HorizontalContentAlignment="Right">Prompt</Label>
-        <TextBox Grid.Row="3" Grid.Column="1"></TextBox>
-
-        <Label Grid.Row="4" Grid.Column="0" HorizontalContentAlignment="Right">Target</Label>
+        <Label Grid.Row="4" Grid.Column="0" HorizontalContentAlignment="Right">Prompt</Label>
         <TextBox Grid.Row="4" Grid.Column="1"></TextBox>
 
-        <Label Grid.Row="5" Grid.Column="0" HorizontalContentAlignment="Right">Using</Label>
+        <Label Grid.Row="5" Grid.Column="0" HorizontalContentAlignment="Right">Target</Label>
         <TextBox Grid.Row="5" Grid.Column="1"></TextBox>
-        
+
+        <Label Grid.Row="6" Grid.Column="0" HorizontalContentAlignment="Right">Using</Label>
+        <TextBox Grid.Row="6" Grid.Column="1"></TextBox>
     </Grid>
 </UserControl>
+    
+<!--d:DataContext="{d:DesignInstance ViewModel:DrawAreaViewModel}" Visibility="{Binding inputBlockVisibility}"-->

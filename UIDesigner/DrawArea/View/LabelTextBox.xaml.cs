@@ -20,23 +20,6 @@ namespace DrawArea.View
     /// </summary>
     public partial class LabelTextBox : UserControl
     {
-        private int block_Row, block_Col;
-        private string id;
-        public int Block_Row
-        {
-            get { return block_Row; }
-            set { block_Row = value; }
-        }
-        public int Block_Col
-        {
-            get { return block_Col; }
-            set { block_Col = value; }
-        }
-        public string Id
-        {
-            get { return id; }
-            set { id = value; }
-        }
         public LabelTextBox()
         {
             InitializeComponent();

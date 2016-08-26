@@ -2,15 +2,14 @@
 using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using DrawAreaToJSON;
+using DrawArea.UIElementClasses;
 
 namespace DrawArea.ViewModel
 {
@@ -20,13 +19,37 @@ namespace DrawArea.ViewModel
         int selectedColumnIndex = -1, selectedRowIndex = -1;
         const int WIDTH = 20;
         const int HEIGHT = 20;
+        int blockNameCount = 0;
+        int uid = 0;
+
+        static DrawAreaUiElementList daList = new DrawAreaUiElementList();
+        List<InputBlockPropertiesClass> vmList = new List<InputBlockPropertiesClass>();
+        DrawAreaUiElement daElement;
         public DrawAreaViewModel()
         {
             inputBlockVisibility = Visibility.Visible;
             outputBlockVisibility = Visibility.Hidden;
         }
+
+        string id;
+        public string uID
+        {
+            get
+            {
+                return id;
+            }
+            set
+            {
+                if (id != value)
+                {
+                    id = value;
+                    RaisePropertyChangedEvent("uID");
+                }
+            }
+        }
+
         string _row;
-        public string row
+        public string Row
         {
             get
             {
@@ -37,7 +60,32 @@ namespace DrawArea.ViewModel
                 if (_row != value)
                 {
                     _row = value;
-                    RaisePropertyChangedEvent("row");
+                    RaisePropertyChangedEvent("Row");
+                    if (_row != "")
+                    {
+                        fun();
+                    }
+                }
+            }
+        }
+       
+        string _col;
+        public string Col
+        {
+            get
+            {
+                return _col;
+            }
+            set
+            {
+                if (_col != value)
+                {
+                    _col = value;
+                    RaisePropertyChangedEvent("Col");
+                    if (_col != "")
+                    {
+                        fun();
+                    }
                 }
             }
         }
@@ -118,15 +166,27 @@ namespace DrawArea.ViewModel
         }
         private void createBlock(int row, int col, int blockWidth, int blockHeight)
         {
+            uID = "";
             int numberOfBlocksLabel;
             int numberOfBlocksBox;
             LabelTextBox ltb = new LabelTextBox();
 
-            ltb.txb.Text = "Label";
-            ltb.Block_Row = row;
-            ltb.Block_Col = col;
-            ltb.Id = System.DateTime.Now.Millisecond.ToString();
+            InputBlockPropertiesClass vm = new InputBlockPropertiesClass();
+            uid++;
+            vm.ID = uid.ToString();
+                //row.ToString() +"-"+ col.ToString();
+                //System.DateTime.Now.Millisecond.ToString();
+            vm.row = row.ToString();
+            vm.col = col.ToString();
+            Row = vm.row;
+            Col = vm.col;
+            uID = vm.ID;
 
+            ltb.tID.Text = vm.ID;
+            ltb.txb.Text = "Label";
+
+            vmList.Add(vm);
+             
             Size s = MeasureTextSize(ltb.txb.Text, ltb);
             numberOfBlocksLabel = (int)Math.Ceiling((double)(Math.Ceiling(s.Width) / WIDTH));
             numberOfBlocksBox = blockWidth - numberOfBlocksLabel;
@@ -143,8 +203,8 @@ namespace DrawArea.ViewModel
             ltb.txt.BorderBrush = Brushes.Red;
             ltb.txt.BorderThickness = new Thickness(2, 2, 2, 2);
 
-            //ltb.txt.TextChanged += blockTextChange;
-            //ltb.PreviewKeyDown += selectInputBlock;
+            ltb.txt.TextChanged += blockTextChange;
+            ltb.PreviewKeyDown += selectInputBlock;
             //ltb.PreviewMouseDown += mouseClickInputBlock;
 
             Grid.SetRow(ltb, row);
@@ -153,14 +213,244 @@ namespace DrawArea.ViewModel
             Grid.SetRowSpan(ltb, ((int)(ltb.Height) / HEIGHT));
             MyGrid.Children.Add(ltb);
 
-            //var blockName = "BLOCK";
-            //blockNameCount = blockNameCount + 1;
-            //blockName = "BLOCK_" + blockNameCount;
+            var blockName = "BLOCK";
+            blockNameCount = blockNameCount + 1;
+            blockName = "BLOCK_" + blockNameCount;
 
-            //daElement = new DrawAreaUiElement(ltb.Id, "INPUT_BLOCK", ltb.Block_Row.ToString(), ltb.Block_Col.ToString(), blockName, "TOKEN", "", "#TARGET", "#SOURCE", "", ltb.txt.Width.ToString(), "12", ltb.txt.Height.ToString());
-            //daList.addUIElementToUIElementList(daElement);
-            //DrawToJSON.DrawAreaToJSON(daList.UIL);
+            daElement = new DrawAreaUiElement(vm.ID, "INPUT_BLOCK", vm.row.ToString(), vm.col.ToString(), blockName, "TOKEN", "", "#TARGET", "#SOURCE", "", ltb.txt.Width.ToString(), "12", ltb.txt.Height.ToString());
+            daList.addUIElementToUIElementList(daElement);
+            DrawToJSON.DrawAreaToJSON(daList.UIL);
+        }
 
+        private void blockTextChange(object sender, RoutedEventArgs e)
+        {
+            LabelTextBox ltb = new LabelTextBox();
+            ltb.txt = (TextBox)sender;
+            ltb.txb.Text = ltb.txt.Text;
+        }
+        public void fun()
+        {
+            int i = 0, j = 0;
+            int flag1 = 0;
+            foreach (InputBlockPropertiesClass a in vmList)
+            {
+                if (a.ID == uID)
+                {
+                    flag1 = 1;
+                    break;
+                }
+                i++;
+            }
+            if(flag1 == 1)
+            {
+                vmList.ElementAt(i).row = Row;
+                foreach(LabelTextBox l in MyGrid.Children)
+                {
+                    if(l.tID.Text == uID)
+                    {
+                        Grid.SetRow(l, int.Parse(Row));
+                        Grid.SetColumn(l, int.Parse(Col));
+                        vmList.ElementAt(i).row = Row;
+                        vmList.ElementAt(i).col = Col;
+                        modifyElement(vmList.ElementAt(i).ID, "", int.Parse(Row), int.Parse(Col), 0, 0);
+                        break;
+                    }
+                    j++;
+                }
+            }
+        }
+        private void selectInputBlock(object sender, KeyEventArgs e)
+        {
+            uID = "";
+            LabelTextBox ltb = (LabelTextBox)sender;
+            int blockWidth = (int)ltb.Width;
+            int blockHeight = (int)ltb.Height;
+            int boxWidth = (int)ltb.txt.Width;
+            int boxHeight = (int)ltb.txt.Height;
+            int widthDiff = blockWidth - boxWidth;
+            string id = ltb.tID.Text;
+            int i = 0;
+
+            foreach(InputBlockPropertiesClass a in vmList)
+            {
+                if(a.ID == (ltb.tID.Text))
+                {
+                    break;
+                }
+                i++;
+            }
+
+            int blockRow = int.Parse(vmList.ElementAt(i).row);
+            int blockCol = int.Parse(vmList.ElementAt(i).col);
+
+            if (e.Key == Key.Delete)
+            {
+                MyGrid.Children.Remove(ltb);
+                modifyElement(vmList.ElementAt(i).ID, "DELETE", 0, 0, 0, 0);
+                return;
+            }
+            if ((Keyboard.IsKeyDown(Key.RightCtrl)) && (Keyboard.IsKeyDown(Key.Up)))
+            {
+                blockRow -= 1;
+                Grid.SetRow(ltb, blockRow);
+                vmList.ElementAt(i).row = blockRow.ToString();
+                modifyElement(vmList.ElementAt(i).ID, "", blockRow, 0, 0, 0);
+
+
+                Row = vmList.ElementAt(i).row;
+                Col = vmList.ElementAt(i).col;
+                uID = vmList.ElementAt(i).ID;
+
+                return;
+            }
+            if ((Keyboard.IsKeyDown(Key.RightCtrl)) && (Keyboard.IsKeyDown(Key.Down)))
+            {
+                blockRow += 1;
+                Grid.SetRow(ltb, blockRow);
+                vmList.ElementAt(i).row = blockRow.ToString();
+                modifyElement(vmList.ElementAt(i).ID, "", blockRow, 0, 0, 0);
+
+
+                Row = vmList.ElementAt(i).row;
+                Col = vmList.ElementAt(i).col;
+                uID = vmList.ElementAt(i).ID;
+
+                return;
+            }
+            if ((Keyboard.IsKeyDown(Key.RightCtrl)) && (Keyboard.IsKeyDown(Key.Left)))
+            {
+                //blockCol -= ((widthDiff / WIDTH) + 1);
+                blockCol -= 1;
+                Grid.SetColumn(ltb, blockCol);
+                int tempCol = int.Parse(vmList.ElementAt(i).col) - 1;
+                vmList.ElementAt(i).col = tempCol.ToString();
+                modifyElement(vmList.ElementAt(i).ID, "", 0, blockCol, 0, 0);
+
+
+                Row = vmList.ElementAt(i).row;
+                Col = vmList.ElementAt(i).col;
+                uID = vmList.ElementAt(i).ID;
+
+                return;
+            }
+            if ((Keyboard.IsKeyDown(Key.RightCtrl)) && (Keyboard.IsKeyDown(Key.Right)))
+            {
+                //blockCol += (-(widthDiff / WIDTH) + 1);
+                blockCol += 1;
+                Grid.SetColumn(ltb, blockCol);
+                int tempCol = int.Parse(vmList.ElementAt(i).col) + 1;
+                vmList.ElementAt(i).col = tempCol.ToString();
+                modifyElement(vmList.ElementAt(i).ID, "", 0, blockCol, 0, 0);
+
+
+                Row = vmList.ElementAt(i).row;
+                Col = vmList.ElementAt(i).col;
+                uID = vmList.ElementAt(i).ID;
+
+                return;
+            }
+
+            if (e.Key == Key.Left)
+            {
+                boxWidth -= WIDTH;
+            }
+            if (e.Key == Key.Right)
+            {
+                boxWidth += WIDTH;
+            }
+            if (e.Key == Key.Up)
+            {
+                boxHeight -= HEIGHT;
+                blockHeight -= HEIGHT;
+            }
+            if (e.Key == Key.Down)
+            {
+                boxHeight += WIDTH;
+                blockHeight += WIDTH;
+            }
+            if (e.Key >= Key.A && e.Key <= Key.Z)
+            {
+            }
+
+            if (boxWidth <= 0)
+                boxWidth = (int)ltb.txt.Width;
+            if (boxHeight <= 0 || blockHeight <= 0)
+            {
+                blockHeight = (int)ltb.Height;
+                boxHeight = (int)ltb.txt.Height;
+            }
+
+            ltb.Width = boxWidth + widthDiff;
+            ltb.Height = blockHeight;
+
+            Grid.SetColumnSpan(((LabelTextBox)sender), (boxWidth + widthDiff) / WIDTH);
+            Grid.SetRowSpan(((LabelTextBox)sender), blockHeight / HEIGHT);
+
+            ltb.txt.Width = boxWidth;
+            ltb.txt.Height = boxHeight;
+
+            Row = vmList.ElementAt(i).row;
+            Col = vmList.ElementAt(i).col;
+            uID = vmList.ElementAt(i).ID;
+
+            Grid.SetColumnSpan(((LabelTextBox)sender).txt, boxWidth / WIDTH);
+            Grid.SetRowSpan(((LabelTextBox)sender).txt, boxHeight / HEIGHT);
+            modifyElement(vmList.ElementAt(i).ID, "", 0, 0, boxWidth, boxHeight);
+        }
+        //private void mouseClickInputBlock(object sender, MouseEventArgs e)
+        //{
+        //    DrawAreaUiElement Element = daElement;
+        //    LabelTextBox ltb = (LabelTextBox)sender;
+        //    foreach (var element in daList.UIL)
+        //    {
+        //        if (element.ID == ltb.Id)
+        //        {
+        //            Element = element;
+        //            break;
+        //        }
+        //    }
+
+        //    string dmlKeyword = Element.DMLKeyword;
+        //    if (dmlKeyword == "INPUT_BLOCK")
+        //    {
+        //        //ibp = new InputBlockProperties();
+        //        //ibp.blockName = Element.BlockName;
+        //        //ibp.row = Element.Row.ToString();
+        //        //ibp.column = Element.Col.ToString();
+        //        //stk.Children.RemoveAt(2);
+        //        //stk.Children.Add(ibp);
+        //    }
+        //    else if (dmlKeyword == "OUTPUT_BLOCK")
+        //    {
+        //        //obp = new OutputBlockProperties();
+        //        //stk.Children.RemoveAt(2);
+        //        //stk.Children.Add(obp);
+        //    }
+        //}
+        public void modifyElement(string blockId, string mode, int row, int col, int len, int height)
+        {
+            foreach (var element in daList.UIL)
+            {
+                if (element.ID == blockId)
+                {
+                    if (mode == "DELETE")
+                        daList.removeUIElementToUIElementList(element);
+                    else
+                    {
+                        if (row > 0)
+                            element.Row = row.ToString();
+                        if (col > 0)
+                            element.Col = col.ToString();
+                        else if ((len > 0) || height > 0)
+                        {
+                            element.Len = len.ToString();
+                            element.Height = height.ToString();
+                        }
+                    }
+                    break;
+                }
+            }
+            DrawToJSON.DrawAreaToJSON(daList.UIL);
         }
         public static Size MeasureTextSize(string text, LabelTextBox ob)
         {

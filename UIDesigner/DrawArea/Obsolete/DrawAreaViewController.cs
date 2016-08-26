@@ -13,7 +13,7 @@
 //using DrawAreaToJSON;
 
 //namespace DrawArea
-//{   
+//{
 //    public partial class DrawAreaViewController
 //    {
 //        Grid myGrid;
@@ -95,7 +95,7 @@
 //            ltb.txt.TextChanged += blockTextChange;
 //            ltb.PreviewKeyDown += selectInputBlock;
 //            ltb.PreviewMouseDown += mouseClickInputBlock;
-            
+
 //            Grid.SetRow(ltb, row);
 //            Grid.SetColumn(ltb, col - numberOfBlocksLabel);
 //            Grid.SetColumnSpan(ltb, ((int)(ltb.Width) / WIDTH));
@@ -240,7 +240,7 @@
 //            }
 
 //            string dmlKeyword = Element.DMLKeyword;
-//            if(dmlKeyword == "INPUT_BLOCK")
+//            if (dmlKeyword == "INPUT_BLOCK")
 //            {
 //                ibp = new InputBlockProperties();
 //                ibp.blockName = Element.BlockName;
