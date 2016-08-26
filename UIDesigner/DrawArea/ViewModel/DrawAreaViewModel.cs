@@ -20,7 +20,11 @@ namespace DrawArea.ViewModel
         int selectedColumnIndex = -1, selectedRowIndex = -1;
         const int WIDTH = 20;
         const int HEIGHT = 20;
-        
+        public DrawAreaViewModel()
+        {
+            inputBlockVisibility = Visibility.Visible;
+            outputBlockVisibility = Visibility.Hidden;
+        }
         string _row;
         public string row
         {
@@ -34,6 +38,39 @@ namespace DrawArea.ViewModel
                 {
                     _row = value;
                     RaisePropertyChangedEvent("row");
+                }
+            }
+        }
+        Visibility _inputBlockVisibility;
+        public Visibility inputBlockVisibility
+        {
+            get
+            {
+                return _inputBlockVisibility;
+            }
+            set
+            {
+                if (_inputBlockVisibility != value)
+                {
+                    _inputBlockVisibility = value;
+                    RaisePropertyChangedEvent("inputBlockVisibility");
+                }
+            }
+        }
+
+        Visibility _outputBlockVisibility;
+        public Visibility outputBlockVisibility
+        {
+            get
+            {
+                return _outputBlockVisibility;
+            }
+            set
+            {
+                if (_outputBlockVisibility != value)
+                {
+                    _outputBlockVisibility = value;
+                    RaisePropertyChangedEvent("outputBlockVisibility");
                 }
             }
         }

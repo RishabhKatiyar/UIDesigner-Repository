@@ -67,11 +67,9 @@
                 <ColumnDefinition Width="20"/>
             </Grid.ColumnDefinitions>
         </Grid>
-        <View:InputBlockProperties Width="Auto"/>
-        <!--<Label Grid.Row="1" Grid.Column="0" HorizontalContentAlignment="Right">Row</Label>
-        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding row, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-
-        <Label Grid.Row="2" Grid.Column="0" HorizontalContentAlignment="Right">Column</Label>
-        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding row, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>-->
+        <StackPanel Orientation="Vertical">
+            <View:InputBlockProperties Width="Auto"/>
+            <View:OutputBlockProperties Width="Auto"/>
+        </StackPanel>
     </StackPanel>
 </Window>
