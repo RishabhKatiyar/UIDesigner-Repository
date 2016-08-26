@@ -9,10 +9,9 @@
     </Window.DataContext>
     <StackPanel Name="stk" Orientation="Horizontal" >
         <control:ToolBox/>
-        <Grid Background="#FFEAF2FB" Name="myGrid" ShowGridLines="True" Height="500" HorizontalAlignment="Center">
+        <Grid Background="#FFEAF2FB" Name="myGrid" ShowGridLines="True" Height="500" HorizontalAlignment="Center" Cursor="Pen">
             <Grid.InputBindings>
                 <MouseBinding Command="{Binding Path=MakeSelected}" CommandParameter="{Binding ElementName=myGrid}" Gesture="LeftClick"></MouseBinding>
-                <!--<MouseBinding Command="{Binding Path=MakeTurn}" Gesture="RightClick "></MouseBinding>, Path=SelectedCell-->
             </Grid.InputBindings>
             <Grid.RowDefinitions>
                 <RowDefinition Height="20"/>

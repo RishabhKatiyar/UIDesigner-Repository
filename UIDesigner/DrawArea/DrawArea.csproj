@@ -119,8 +119,8 @@
     </ApplicationDefinition>
     <Compile Include="ViewModel\DelegateCommand.cs" />
     <Compile Include="ViewModel\DrawAreaViewModel.cs" />
-    <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="Galasoft.MvvmLight\MainViewModel.cs" />
+    <Compile Include="Galasoft.MvvmLight\ViewModelLocator.cs" />
     <Compile Include="View\InputBlockProperties.xaml.cs">
       <DependentUpon>InputBlockProperties.xaml</DependentUpon>
     </Compile>
@@ -149,7 +149,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ViewModel\DrawAreaViewController.cs" />
+    <Compile Include="Obsolete\DrawAreaViewController.cs" />
     <Compile Include="View\LabelTextBox.xaml.cs">
       <DependentUpon>LabelTextBox.xaml</DependentUpon>
     </Compile>
