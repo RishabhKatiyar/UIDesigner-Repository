@@ -20,16 +20,9 @@ namespace DrawArea.View
     /// </summary>
     public partial class InputBlockProperties : UserControl
     {
-        public string blockName
-        { get; set; }
-        public string row
-        { get; set; }
-        public string column
-        { get; set; }
         public InputBlockProperties()
         {
             InitializeComponent();
-            DataContext = this;
         }
     }
 }

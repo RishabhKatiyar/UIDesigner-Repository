@@ -14,63 +14,30 @@ using System.Windows.Media;
 
 namespace DrawArea.ViewModel
 {
-    public partial class DrawAreaViewModel : INotifyPropertyChanged
+    public partial class DrawAreaViewModel : ViewModelBase 
     {
         Grid MyGrid;
         int selectedColumnIndex = -1, selectedRowIndex = -1;
         const int WIDTH = 20;
         const int HEIGHT = 20;
-        public event PropertyChangedEventHandler PropertyChanged;
-        string row;
-        public string Row
+        
+        string _row;
+        public string row
         {
             get
             {
-                return row;
+                return _row;
             }
             set
             {
-                if (row != value)
+                if (_row != value)
                 {
-                    row = value;
-                    RaisePropertyChangedEvent("Row");
+                    _row = value;
+                    RaisePropertyChangedEvent("row");
                 }
             }
         }
-        string col;
-        public string Col
-        {
-            get
-            {
-                return col;
-            }
-            set
-            {
-                if (col != value)
-                {
-                    col = value;
-                    RaisePropertyChangedEvent("Col");
-                }
-            }
-        }
-        protected void RaisePropertyChangedEvent(string propertyName)
-        {
-            var handler = PropertyChanged;
-            if (handler != null)
-                handler(this, new PropertyChangedEventArgs(propertyName));
-        }
 
-        public ICommand GoCommand
-        {
-            get { return new DelegateCommand(GoFun); }
-        }
-
-        private void GoFun()
-        {
-            Row = "10";
-            Col = "20";
-
-        }
         private RelayCommand<Grid> _makeSelected;
         public RelayCommand<Grid> MakeSelected
         {

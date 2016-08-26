@@ -1,5 +1,4 @@
-﻿using DrawArea.View;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -15,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace DrawArea
+namespace DrawArea.View
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

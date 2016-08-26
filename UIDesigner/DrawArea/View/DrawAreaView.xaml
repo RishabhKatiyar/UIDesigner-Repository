@@ -1,14 +1,15 @@
-﻿<Window x:Class="DrawArea.DrawAreaView"
+﻿<Window x:Class="DrawArea.View.DrawAreaView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:control="clr-namespace:DrawArea.View" WindowStartupLocation="CenterScreen"
-        Title="Draw Area" Height="541" Width="860"
-        xmlns:ViewModel="clr-namespace:DrawArea.ViewModel">
+        xmlns:View="clr-namespace:DrawArea.View" 
+        xmlns:ViewModel="clr-namespace:DrawArea.ViewModel"
+        WindowStartupLocation="CenterScreen"
+        Title="Draw Area" Height="541" Width="860">
     <Window.DataContext>
         <ViewModel:DrawAreaViewModel/>
     </Window.DataContext>
     <StackPanel Name="stk" Orientation="Horizontal" >
-        <control:ToolBox/>
+        <View:ToolBox/>
         <Grid Background="#FFEAF2FB" Name="myGrid" ShowGridLines="True" Height="500" HorizontalAlignment="Center" Cursor="Pen">
             <Grid.InputBindings>
                 <MouseBinding Command="{Binding Path=MakeSelected}" CommandParameter="{Binding ElementName=myGrid}" Gesture="LeftClick"></MouseBinding>
@@ -66,11 +67,11 @@
                 <ColumnDefinition Width="20"/>
             </Grid.ColumnDefinitions>
         </Grid>
-        <control:PropertiesWindow Width="Auto"/>
-        <StackPanel Orientation="Vertical">
-            <TextBox Height="Auto" Width="100" Text="{Binding Path=Row, Mode=TwoWay}"/>
-            <TextBox Height="Auto" Width="100" Text="{Binding Path=Col, Mode=TwoWay}"/>
-            <Button Command="{Binding Path=GoCommand}" CommandParameter="100" Height="Auto">Go</Button>
-        </StackPanel>
+        <View:InputBlockProperties Width="Auto"/>
+        <!--<Label Grid.Row="1" Grid.Column="0" HorizontalContentAlignment="Right">Row</Label>
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding row, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <Label Grid.Row="2" Grid.Column="0" HorizontalContentAlignment="Right">Column</Label>
+        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding row, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>-->
     </StackPanel>
 </Window>
