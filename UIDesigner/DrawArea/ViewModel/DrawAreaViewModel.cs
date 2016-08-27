@@ -332,7 +332,7 @@ namespace DrawArea.ViewModel
                 Grid.SetColumn(ltb, blockCol);
                 int tempCol = int.Parse(vmList.ElementAt(i).col) - 1;
                 vmList.ElementAt(i).col = tempCol.ToString();
-                modifyElement(vmList.ElementAt(i).ID, "", 0, blockCol, 0, 0);
+                modifyElement(vmList.ElementAt(i).ID, "", 0, tempCol, 0, 0);
 
 
                 Row = vmList.ElementAt(i).row;
@@ -348,7 +348,7 @@ namespace DrawArea.ViewModel
                 Grid.SetColumn(ltb, blockCol);
                 int tempCol = int.Parse(vmList.ElementAt(i).col) + 1;
                 vmList.ElementAt(i).col = tempCol.ToString();
-                modifyElement(vmList.ElementAt(i).ID, "", 0, blockCol, 0, 0);
+                modifyElement(vmList.ElementAt(i).ID, "", 0, tempCol, 0, 0);
 
 
                 Row = vmList.ElementAt(i).row;
