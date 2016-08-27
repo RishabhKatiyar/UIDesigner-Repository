@@ -1,15 +1,18 @@
-﻿using DrawArea.View;
+﻿using DrawArea.UIElementClasses;
+using DrawArea.View;
+using DrawAreaToJSON;
 using GalaSoft.MvvmLight.Command;
+using JsonToDML;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using DrawAreaToJSON;
-using DrawArea.UIElementClasses;
 
 namespace DrawArea.ViewModel
 {
@@ -27,8 +30,9 @@ namespace DrawArea.ViewModel
         DrawAreaUiElement daElement;
         public DrawAreaViewModel()
         {
-            inputBlockVisibility = Visibility.Visible;
+            inputBlockVisibility = Visibility.Hidden;
             outputBlockVisibility = Visibility.Hidden;
+            CreateFileWatcher();
         }
 
         string id;
@@ -205,7 +209,7 @@ namespace DrawArea.ViewModel
 
             ltb.txt.TextChanged += blockTextChange;
             ltb.PreviewKeyDown += selectInputBlock;
-            //ltb.PreviewMouseDown += mouseClickInputBlock;
+            ltb.PreviewMouseDown += mouseClickInputBlock;
 
             Grid.SetRow(ltb, row);
             Grid.SetColumn(ltb, col - numberOfBlocksLabel);
@@ -397,36 +401,43 @@ namespace DrawArea.ViewModel
             Grid.SetRowSpan(((LabelTextBox)sender).txt, boxHeight / HEIGHT);
             modifyElement(vmList.ElementAt(i).ID, "", 0, 0, boxWidth, boxHeight);
         }
-        //private void mouseClickInputBlock(object sender, MouseEventArgs e)
-        //{
-        //    DrawAreaUiElement Element = daElement;
-        //    LabelTextBox ltb = (LabelTextBox)sender;
-        //    foreach (var element in daList.UIL)
-        //    {
-        //        if (element.ID == ltb.Id)
-        //        {
-        //            Element = element;
-        //            break;
-        //        }
-        //    }
-
-        //    string dmlKeyword = Element.DMLKeyword;
-        //    if (dmlKeyword == "INPUT_BLOCK")
-        //    {
-        //        //ibp = new InputBlockProperties();
-        //        //ibp.blockName = Element.BlockName;
-        //        //ibp.row = Element.Row.ToString();
-        //        //ibp.column = Element.Col.ToString();
-        //        //stk.Children.RemoveAt(2);
-        //        //stk.Children.Add(ibp);
-        //    }
-        //    else if (dmlKeyword == "OUTPUT_BLOCK")
-        //    {
-        //        //obp = new OutputBlockProperties();
-        //        //stk.Children.RemoveAt(2);
-        //        //stk.Children.Add(obp);
-        //    }
-        //}
+        private void mouseClickInputBlock(object sender, MouseEventArgs e)
+        {
+            uID = "";
+            DrawAreaUiElement Element = daElement;
+            LabelTextBox ltb = (LabelTextBox)sender;
+            int i = 0;
+            foreach (InputBlockPropertiesClass a in vmList)
+            {
+                if (a.ID == (ltb.tID.Text))
+                {
+                    break;
+                }
+                i++;
+            }
+            foreach (var element in daList.UIL)
+            {
+                if (element.ID == ltb.tID.Text)
+                {
+                    Element = element;
+                    break;
+                }
+            } 
+            string dmlKeyword = Element.DMLKeyword;
+            if (dmlKeyword == "INPUT_BLOCK")
+            {
+                inputBlockVisibility = Visibility.Visible;
+                outputBlockVisibility = Visibility.Hidden;
+                Row = vmList.ElementAt(i).row;
+                Col = vmList.ElementAt(i).col;
+                uID = vmList.ElementAt(i).ID;
+            }
+            else if (dmlKeyword == "OUTPUT_BLOCK")
+            {
+                inputBlockVisibility = Visibility.Hidden;
+                outputBlockVisibility = Visibility.Visible;   
+            }
+        }
         public void modifyElement(string blockId, string mode, int row, int col, int len, int height)
         {
             foreach (var element in daList.UIL)
@@ -467,5 +478,109 @@ namespace DrawArea.ViewModel
                                                  Brushes.Black);
             return new Size(ft.Width, ft.Height);
         }
+        
+        
+        #region codeArea
+        DMLUIElementList ui;        //List of objects i.e. UI Elements
+        DMLUIElement ue;            //Temporary object of UI Element that will be initialized for 
+        string codeArea;
+        public string CodeArea
+        {
+            get { return codeArea; }
+            set
+            {
+                if (codeArea != value)
+                {
+                    codeArea = value;
+                    RaisePropertyChangedEvent("CodeArea");
+                }
+            }
+        }
+        public void CreateFileWatcher()
+        {
+            FileSystemWatcher watcher = new FileSystemWatcher();
+            watcher.Path = "c:\\temp\\";
+            watcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite
+               | NotifyFilters.FileName | NotifyFilters.DirectoryName;
+            watcher.Filter = "*.json";
+
+            watcher.Changed += new FileSystemEventHandler(OnChanged);
+            //watcher.Created += new FileSystemEventHandler(OnChanged);
+            //watcher.Deleted += new FileSystemEventHandler(OnChanged);
+            //watcher.Renamed += new RenamedEventHandler(OnRenamed);
+
+            watcher.EnableRaisingEvents = true;
+        }
+        private void OnChanged(object source, FileSystemEventArgs e)
+        {
+            writeDML();
+        }
+        public void writeDML()
+        {
+            string json;
+            try
+            {
+                using (StreamReader r = new StreamReader("c:\\temp\\UIDesign.json"))
+                {
+                    json = r.ReadToEnd();
+                }
+            }
+            catch (Exception)
+            {
+                return;
+            }
+
+            ui = new DMLUIElementList();
+            //delete the previous list and create a new one for any json file change
+            //can be optimized
+
+            dynamic dynObj = JsonConvert.DeserializeObject(json);
+
+            foreach (var data in dynObj.UIElements)
+            {
+                string dmlKeyword = data.DMLKeyword;
+                switch (dmlKeyword)
+                {
+                    case DMLUIElementSyntax.InputBlock: ue = new InputBlock();
+                        break;
+                    case DMLUIElementSyntax.OutputBlock: ue = new OutputBlock();
+                        break;
+                    case DMLUIElementSyntax.Text: ue = new JsonToDML.Text();
+                        break;
+                    case DMLUIElementSyntax.Line: ue = new JsonToDML.Line();
+                        break;
+                    case DMLUIElementSyntax.ItemBlock: ue = new ItemBlock();
+                        break;
+                    case DMLUIElementSyntax.MenuBlock: ue = new MenuBlock();
+                        break;
+                    case DMLUIElementSyntax.PauseBlock: ue = new PauseBlock();
+                        break;
+                    case DMLUIElementSyntax.YesNoBlock: ue = new YesNoBlock();
+                        break;
+                }
+
+                ue.setMembers(data);
+                ue.qualifiers.setMembers(data);
+
+                ui.addUIElementToUIElementList(ue);
+            }
+            refreshDisplayedDMLCode();
+        }
+
+        async public void  refreshDisplayedDMLCode()
+        {
+            GenerateDMLCode genDC;
+            await Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+            {
+                CodeArea = "";
+                foreach (var ob in ui.UIL)
+                {
+                    genDC = new GenerateDMLCode(ob);
+                    CodeArea += genDC.serializeDML();
+                }
+            }));
+        }
+        #endregion 
+
     }
 }

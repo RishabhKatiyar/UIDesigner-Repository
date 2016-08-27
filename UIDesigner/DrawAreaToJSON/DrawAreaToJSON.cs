@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 using JsonToDML;
 using Newtonsoft.Json;
 using System.IO;
+
 namespace DrawAreaToJSON
 {
     public  class DrawToJSON
     {
-        public static void DrawAreaToJSON(List<DrawAreaUiElement> elementsList)
+        async public static void DrawAreaToJSON(List<DrawAreaUiElement> elementsList)
         {
-            string jasonText = "{\n\"UIElements\":\n";
-            jasonText += "[\n";
+            string jsonText = "{\n\"UIElements\":\n";
+            jsonText += "[\n";
             foreach (var element in elementsList)
             {
                 // serialize JSON directly to a file
@@ -21,12 +22,18 @@ namespace DrawAreaToJSON
                 {
                     JsonSerializer serializer = new JsonSerializer();
                     serializer.Serialize(file, element);
-                    jasonText += JsonConvert.SerializeObject(element);
-                    jasonText += ", \n";
+                    jsonText += JsonConvert.SerializeObject(element);
+                    jsonText += ", \n";
                 }
             }
-            jasonText += "\n]\n}";
-            File.WriteAllText(@"c:\temp\UIDesign.json", jasonText);
+            jsonText += "\n]\n}";
+            File.WriteAllText(@"c:\temp\UIDesign.json", jsonText);
+            int t = await Task.Run(() => WriteToJson(elementsList));
+        }
+
+        public static int WriteToJson(List<DrawAreaUiElement> elementsList)
+        {
+            return 1;
         }
     }
 

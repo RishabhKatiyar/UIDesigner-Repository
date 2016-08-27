@@ -58,6 +58,5 @@ C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UI
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\JsonToDML\bin\Debug\Microsoft.Practices.ServiceLocation.pdb
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\JsonToDML\bin\Debug\Microsoft.Practices.ServiceLocation.xml
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\JsonToDML\bin\Debug\Newtonsoft.Json.xml
-C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\JsonToDML\obj\Debug\JsonToDML.csprojResolveAssemblyReference.cache
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\JsonToDML\obj\Debug\JsonToDML.dll
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\JsonToDML\obj\Debug\JsonToDML.pdb

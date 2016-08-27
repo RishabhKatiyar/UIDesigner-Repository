@@ -75,8 +75,6 @@ C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UI
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\UIDesigner\bin\Debug\Microsoft.Practices.ServiceLocation.pdb
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\UIDesigner\bin\Debug\Microsoft.Practices.ServiceLocation.xml
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\UIDesigner\bin\Debug\Newtonsoft.Json.xml
-C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\UIDesigner\obj\Debug\View\CodeAreaView.baml
-C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\UIDesigner\obj\Debug\View\CodeAreaView.g.cs
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\UIDesigner\obj\Debug\App.g.cs
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\UIDesigner\obj\Debug\GeneratedInternalTypeHelper.g.cs
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\UIDesigner\obj\Debug\UIDesigner_MarkupCompile.cache
@@ -87,3 +85,4 @@ C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UI
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\UIDesigner\obj\Debug\CodeArea.csproj.GenerateResource.Cache
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\UIDesigner\obj\Debug\UIDesigner.exe
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\UIDesigner\obj\Debug\UIDesigner.pdb
+C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\UIDesigner\obj\Debug\CodeArea.csprojResolveAssemblyReference.cache

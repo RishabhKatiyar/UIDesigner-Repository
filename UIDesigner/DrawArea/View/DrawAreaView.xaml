@@ -4,72 +4,82 @@
         xmlns:View="clr-namespace:DrawArea.View" 
         xmlns:ViewModel="clr-namespace:DrawArea.ViewModel"
         WindowStartupLocation="CenterScreen"
-        Title="Draw Area" Height="541" Width="860">
+        Title="Draw Area" Height="800" Width="Auto">
     <Window.DataContext>
         <ViewModel:DrawAreaViewModel/>
     </Window.DataContext>
-    <StackPanel Name="stk" Orientation="Horizontal" >
-        <View:ToolBox/>
-        <Grid Background="#FFEAF2FB" Name="myGrid" ShowGridLines="True" Height="500" HorizontalAlignment="Center" Cursor="Pen">
-            <Grid.InputBindings>
-                <MouseBinding Command="{Binding Path=MakeSelected}" CommandParameter="{Binding ElementName=myGrid}" Gesture="LeftClick"></MouseBinding>
-            </Grid.InputBindings>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="20"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="20"/>
-            </Grid.ColumnDefinitions>
-        </Grid>
-        <StackPanel Orientation="Vertical">
-            <View:InputBlockProperties Width="Auto"/>
-            <View:OutputBlockProperties Width="Auto"/>
-        </StackPanel>
-    </StackPanel>
+    <DockPanel >
+        <View:ToolBox DockPanel.Dock="Left" BorderBrush="#FF293955" BorderThickness="3,1"/>
+        <Border DockPanel.Dock="Right" BorderBrush="#FF293A56" BorderThickness="3,1">
+            <StackPanel >
+                <Label Background="#FF293955" Foreground="White">Properties</Label>
+                <View:InputBlockProperties Visibility="{Binding inputBlockVisibility}"/>
+                <View:OutputBlockProperties Visibility="{Binding outputBlockVisibility}"/>
+            </StackPanel>
+        </Border>
+        <DockPanel>
+            <Grid DockPanel.Dock="Top" Name="myGrid" Background="#FFEAF2FB" ShowGridLines="True" Width ="Auto" Height="Auto" HorizontalAlignment="Center" Cursor="Pen" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <Grid.InputBindings>
+                    <MouseBinding Command="{Binding Path=MakeSelected}" CommandParameter="{Binding ElementName=myGrid}" Gesture="LeftClick"></MouseBinding>
+                </Grid.InputBindings>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="20"/>
+                </Grid.ColumnDefinitions>
+            </Grid>
+            <TextBox  DockPanel.Dock="Bottom" Height="250" Width="Auto"
+               Name="codeArea"
+               Margin="2"
+		       TextWrapping="Wrap"
+               ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding CodeArea}" FontSize="10" HorizontalScrollBarVisibility="Auto" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+        </DockPanel>
+    </DockPanel>
 </Window>
