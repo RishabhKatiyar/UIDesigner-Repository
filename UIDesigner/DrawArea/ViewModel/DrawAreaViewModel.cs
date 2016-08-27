@@ -67,7 +67,7 @@ namespace DrawArea.ViewModel
                     RaisePropertyChangedEvent("Row");
                     if (_row != "")
                     {
-                        fun();
+                        readPropertiesAndModifyUIElement();
                     }
                 }
             }
@@ -88,7 +88,7 @@ namespace DrawArea.ViewModel
                     RaisePropertyChangedEvent("Col");
                     if (_col != "")
                     {
-                        fun();
+                        readPropertiesAndModifyUIElement();
                     }
                 }
             }
@@ -232,7 +232,7 @@ namespace DrawArea.ViewModel
             ltb.txt = (TextBox)sender;
             ltb.txb.Text = ltb.txt.Text;
         }
-        public void fun()
+        public void readPropertiesAndModifyUIElement()
         {
             int i = 0, j = 0;
             int flag1 = 0;
@@ -253,7 +253,11 @@ namespace DrawArea.ViewModel
                     if(l.tID.Text == uID)
                     {
                         Grid.SetRow(l, int.Parse(Row));
-                        Grid.SetColumn(l, int.Parse(Col));
+                        int blockWidth = (int)l.Width;
+                        int boxWidth = (int)l.txt.Width;
+                        int widthDiff = blockWidth - boxWidth;
+                        int calculatedCol = int.Parse(Col) - ((widthDiff / WIDTH));
+                        Grid.SetColumn(l, calculatedCol);
                         vmList.ElementAt(i).row = Row;
                         vmList.ElementAt(i).col = Col;
                         modifyElement(vmList.ElementAt(i).ID, "", int.Parse(Row), int.Parse(Col), 0, 0);
@@ -323,8 +327,8 @@ namespace DrawArea.ViewModel
             }
             if ((Keyboard.IsKeyDown(Key.RightCtrl)) && (Keyboard.IsKeyDown(Key.Left)))
             {
-                //blockCol -= ((widthDiff / WIDTH) + 1);
-                blockCol -= 1;
+                blockCol -= ((widthDiff / WIDTH) + 1);
+                //blockCol -= 1;
                 Grid.SetColumn(ltb, blockCol);
                 int tempCol = int.Parse(vmList.ElementAt(i).col) - 1;
                 vmList.ElementAt(i).col = tempCol.ToString();
@@ -339,8 +343,8 @@ namespace DrawArea.ViewModel
             }
             if ((Keyboard.IsKeyDown(Key.RightCtrl)) && (Keyboard.IsKeyDown(Key.Right)))
             {
-                //blockCol += (-(widthDiff / WIDTH) + 1);
-                blockCol += 1;
+                blockCol += (-(widthDiff / WIDTH) + 1);
+                //blockCol += 1;
                 Grid.SetColumn(ltb, blockCol);
                 int tempCol = int.Parse(vmList.ElementAt(i).col) + 1;
                 vmList.ElementAt(i).col = tempCol.ToString();

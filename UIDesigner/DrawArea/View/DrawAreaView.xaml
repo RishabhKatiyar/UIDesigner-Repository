@@ -18,7 +18,7 @@
             </StackPanel>
         </Border>
         <DockPanel>
-            <Grid DockPanel.Dock="Top" Name="myGrid" Background="#FFEAF2FB" ShowGridLines="True" Width ="Auto" Height="Auto" HorizontalAlignment="Center" Cursor="Pen" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <Grid DockPanel.Dock="Top" Name="myGrid" Background="#FFEAF2FB" ShowGridLines="True" Width ="Auto" Height="Auto" HorizontalAlignment="Center" Cursor="Pen">
                 <Grid.InputBindings>
                     <MouseBinding Command="{Binding Path=MakeSelected}" CommandParameter="{Binding ElementName=myGrid}" Gesture="LeftClick"></MouseBinding>
                 </Grid.InputBindings>
@@ -83,3 +83,5 @@
         </DockPanel>
     </DockPanel>
 </Window>
+
+<!--ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Auto"-->

@@ -11,7 +11,7 @@ namespace DrawAreaToJSON
 {
     public  class DrawToJSON
     {
-        async public static void DrawAreaToJSON(List<DrawAreaUiElement> elementsList)
+        public static void DrawAreaToJSON(List<DrawAreaUiElement> elementsList)
         {
             string jsonText = "{\n\"UIElements\":\n";
             jsonText += "[\n";
@@ -28,7 +28,7 @@ namespace DrawAreaToJSON
             }
             jsonText += "\n]\n}";
             File.WriteAllText(@"c:\temp\UIDesign.json", jsonText);
-            int t = await Task.Run(() => WriteToJson(elementsList));
+            //int t = await Task.Run(() => WriteToJson(elementsList));
         }
 
         public static int WriteToJson(List<DrawAreaUiElement> elementsList)
