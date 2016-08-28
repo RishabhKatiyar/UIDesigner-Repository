@@ -98,8 +98,6 @@
     <Compile Include="GenerateDMLCode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DMLUIElements.cs" />
-    <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\ViewModelLocator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

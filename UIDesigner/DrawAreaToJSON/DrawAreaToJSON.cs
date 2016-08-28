@@ -1,42 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using JsonToDML;
-using Newtonsoft.Json;
-using System.IO;
+﻿using System.Collections.Generic;
 
 namespace DrawAreaToJSON
 {
-    public  class DrawToJSON
-    {
-        public static void DrawAreaToJSON(List<DrawAreaUiElement> elementsList)
-        {
-            string jsonText = "{\n\"UIElements\":\n";
-            jsonText += "[\n";
-            foreach (var element in elementsList)
-            {
-                // serialize JSON directly to a file
-                using (StreamWriter file = File.CreateText(@"c:\temp\UIDesign.txt"))
-                {
-                    JsonSerializer serializer = new JsonSerializer();
-                    serializer.Serialize(file, element);
-                    jsonText += JsonConvert.SerializeObject(element);
-                    jsonText += ", \n";
-                }
-            }
-            jsonText += "\n]\n}";
-            File.WriteAllText(@"c:\temp\UIDesign.json", jsonText);
-            //int t = await Task.Run(() => WriteToJson(elementsList));
-        }
-
-        public static int WriteToJson(List<DrawAreaUiElement> elementsList)
-        {
-            return 1;
-        }
-    }
-
     public class DrawAreaUiElement
     {
         public DrawAreaUiElement(string id,string dmlKeyword,string row,string col,string blockName,string tokenText,string endRow,string target,string source,string facility,string len,string displayLength,string height )
