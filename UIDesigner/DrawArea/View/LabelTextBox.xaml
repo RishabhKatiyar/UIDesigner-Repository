@@ -5,9 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" d:DesignWidth="40" Height="20">
     <DockPanel Margin="0,0,0,0">
-        <TextBlock Name="txb" Text="{Binding Path=Label}"
-                 HorizontalAlignment="Right" Width="20"/>
-        <TextBox Name="txt" Text="{Binding Path=Value}"
-                 HorizontalAlignment="Left" Width="20"/>
+        <TextBlock Name="txb" HorizontalAlignment="Right" Width="20"/>
+        <TextBox Name="txt" HorizontalAlignment="Left" Width="20"/>
+        <TextBox Name="tID"  Visibility="Hidden"/>
     </DockPanel>
 </UserControl>
