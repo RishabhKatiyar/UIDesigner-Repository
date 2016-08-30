@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\DrawArea\obj\Debug\
+C:\D Drive\UIDesigner\DrawArea\obj\Debug\
 DrawArea
 none
 false
 DEBUG;TRACE
-C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\DrawArea\App.xaml
-51312695934
+C:\D Drive\UIDesigner\DrawArea\App.xaml
+5-614488199
 
-172092068081
-33-1688318376
-View\InputBlockProperties.xaml;View\LabelTextBox.xaml;View\DrawAreaView.xaml;View\OutputBlockProperties.xaml;View\ToolBox.xaml;
+171406225101
+321934754471
+InputBlockProperties\InputBlockProperties.xaml;LabelTextBox\LabelTextBox.xaml;DrawArea\DrawAreaView.xaml;OutputBlockProperties\OutputBlockProperties.xaml;ToolBox\ToolBox.xaml;
 
-True
+False
 
