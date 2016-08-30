@@ -40,6 +40,7 @@ namespace DrawArea
                 const int HEIGHT = 20;
                 int blockNameCount = 0;
                 int uid = 0;
+                //LabelTextBox LTB = new LabelTextBox();
                 static DrawAreaUiElementList daList = new DrawAreaUiElementList();
                 List<InputBlockPropertiesViewModel> viewModelList = new List<InputBlockPropertiesViewModel>();
                 DrawAreaUiElement daElement;
@@ -59,6 +60,7 @@ namespace DrawArea
                         {
                             _inputBlockPropertiesViewModel = value;
                             RaisePropertyChangedEvent("inputBlockPropertiesViewModel");
+                            //readPropertiesAndModifyUIElement();
                         }
                     }
                 }
@@ -92,23 +94,6 @@ namespace DrawArea
                         }
                     }
                 }
-
-                //Visibility _outputBlockVisibility;
-                //public Visibility outputBlockVisibility
-                //{
-                //    get
-                //    {
-                //        return _outputBlockVisibility;
-                //    }
-                //    set
-                //    {
-                //        if (_outputBlockVisibility != value)
-                //        {
-                //            _outputBlockVisibility = value;
-                //            RaisePropertyChangedEvent("outputBlockVisibility");
-                //        }
-                //    }
-                //}
 
             #endregion
 
@@ -160,7 +145,6 @@ namespace DrawArea
             }
             private void createBlock(int row, int col, int blockWidth, int blockHeight)
             {
-                //uID = "";
                 InputBlockPropertiesViewModel ob = new InputBlockPropertiesViewModel();
                 
                 int numberOfBlocksLabel;
@@ -218,44 +202,22 @@ namespace DrawArea
                 ltb.txt = (TextBox)sender;
                 ltb.txb.Text = ltb.txt.Text;
             }
-            //public void readPropertiesAndModifyUIElement()
-            //{
-            //    int i = 0, j = 0;
-            //    int flag1 = 0;
-            //    foreach (InputBlockPropertiesClass a in vmList)
-            //    {
-            //        if (a.ID == uID)
-            //        {
-            //            flag1 = 1;
-            //            break;
-            //        }
-            //        i++;
-            //    }
-            //    if (flag1 == 1)
-            //    {
-            //        vmList.ElementAt(i).row = Row;
-            //        foreach (LabelTextBox l in MyGrid.Children)
-            //        {
-            //            if (l.tID.Text == uID)
-            //            {
-            //                Grid.SetRow(l, int.Parse(Row));
-            //                int blockWidth = (int)l.Width;
-            //                int boxWidth = (int)l.txt.Width;
-            //                int widthDiff = blockWidth - boxWidth;
-            //                int calculatedCol = int.Parse(Col) - ((widthDiff / WIDTH));
-            //                Grid.SetColumn(l, calculatedCol);
-            //                vmList.ElementAt(i).row = Row;
-            //                vmList.ElementAt(i).col = Col;
-            //                modifyElement(vmList.ElementAt(i).ID, "", int.Parse(Row), int.Parse(Col), 0, 0);
-            //                break;
-            //            }
-            //            j++;
-            //        }
-            //    }
-            //}
+            public void readPropertiesAndModifyUIElement()
+            {
+                foreach(InputBlockPropertiesViewModel a in viewModelList)
+                {
+                    if(a == inputBlockPropertiesViewModel)
+                    {
+                        //Grid.SetRow(LTB, int.Parse(a.Row));
+                        //Grid.SetColumn(LTB, int.Parse(a.Col));
+                    }
+                }
+                
+            }
             private void selectInputBlock(object sender, KeyEventArgs e)
             {
                 LabelTextBox ltb = (LabelTextBox)sender;
+                //LTB = ltb;
                 inputBlockPropertiesViewModel = (InputBlockPropertiesViewModel)ltb.DataContext;
 
                 int blockWidth = (int)ltb.Width;
@@ -361,6 +323,7 @@ namespace DrawArea
             private void mouseClickInputBlock(object sender, MouseEventArgs e)
             {
                 LabelTextBox ltb = (LabelTextBox)sender;
+                //LTB = ltb;
                 inputBlockPropertiesViewModel = (InputBlockPropertiesViewModel)ltb.DataContext;
 
                 string dmlKeyword = inputBlockPropertiesViewModel.dmlKeyword;
