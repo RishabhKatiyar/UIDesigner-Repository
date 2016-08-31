@@ -4,6 +4,7 @@ using JsonToDML;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -24,10 +25,30 @@ namespace DrawArea
             CreateFileWatcher();
 
             inputBlockPropertiesViewModel = new InputBlockPropertiesViewModel();
-            inputBlockPropertiesViewModel.ID = "";
-            inputBlockPropertiesViewModel.Row = "";
-            inputBlockPropertiesViewModel.Col = "";
             inputBlockPropertiesViewModel.inputBlockVisibility = Visibility.Hidden;
+            
+            PropertyChanged += (obj, args) =>
+            { System.Console.WriteLine("Property " + args.PropertyName + " changed"); };
+
+            _oldRow = inputBlockPropertiesViewModel.Row;
+            _timer = new System.Timers.Timer();
+            //_timer.AutoReset = false;
+            //interval set to 1 second
+            _timer.Interval = 1000;
+            _timer.Elapsed += timer_Elapsed;
+            _timer.Start();
+        }
+
+        private void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            if (_oldRow != inputBlockPropertiesViewModel.Row || _oldCol != inputBlockPropertiesViewModel.Col)
+            {
+                _oldRow = inputBlockPropertiesViewModel.Row;
+                _oldCol = inputBlockPropertiesViewModel.Col;
+                Application.Current.Dispatcher.Invoke(() => readPropertiesAndModifyUIElement());
+            }
+            //because we did _timer.AutoReset = false; we need to manually restart the timer.
+            _timer.Start();
         }
 
         #region drawArea
@@ -40,11 +61,12 @@ namespace DrawArea
                 const int HEIGHT = 20;
                 int blockNameCount = 0;
                 int uid = 0;
-                //LabelTextBox LTB = new LabelTextBox();
-                static DrawAreaUiElementList daList = new DrawAreaUiElementList();
+                DrawAreaUiElementList daList = new DrawAreaUiElementList();
                 List<InputBlockPropertiesViewModel> viewModelList = new List<InputBlockPropertiesViewModel>();
                 DrawAreaUiElement daElement;
-
+                private System.Timers.Timer _timer;
+                string _oldRow;
+                string _oldCol;
             #endregion
 
             #region properties
@@ -60,7 +82,6 @@ namespace DrawArea
                         {
                             _inputBlockPropertiesViewModel = value;
                             RaisePropertyChangedEvent("inputBlockPropertiesViewModel");
-                            //readPropertiesAndModifyUIElement();
                         }
                     }
                 }
@@ -204,15 +225,23 @@ namespace DrawArea
             }
             public void readPropertiesAndModifyUIElement()
             {
-                foreach(InputBlockPropertiesViewModel a in viewModelList)
+                var ob = inputBlockPropertiesViewModel;
+                if (MyGrid != null)
                 {
-                    if(a == inputBlockPropertiesViewModel)
+                    foreach (LabelTextBox child in MyGrid.Children)
                     {
-                        //Grid.SetRow(LTB, int.Parse(a.Row));
-                        //Grid.SetColumn(LTB, int.Parse(a.Col));
+                        if (child.DataContext == ob)
+                        {
+                            Grid.SetRow(child, int.Parse(inputBlockPropertiesViewModel.Row));
+                            int blockWidth = (int)child.Width;
+                            int boxWidth = (int)child.txt.Width;
+                            int widthDiff = blockWidth - boxWidth;
+                            int calculatedCol = int.Parse(inputBlockPropertiesViewModel.Col) - ((widthDiff / WIDTH));
+                            Grid.SetColumn(child, calculatedCol);
+                            modifyElement(inputBlockPropertiesViewModel.ID, "", int.Parse(inputBlockPropertiesViewModel.Row), int.Parse(inputBlockPropertiesViewModel.Col), 0, 0);
+                        }
                     }
                 }
-                
             }
             private void selectInputBlock(object sender, KeyEventArgs e)
             {
@@ -323,7 +352,6 @@ namespace DrawArea
             private void mouseClickInputBlock(object sender, MouseEventArgs e)
             {
                 LabelTextBox ltb = (LabelTextBox)sender;
-                //LTB = ltb;
                 inputBlockPropertiesViewModel = (InputBlockPropertiesViewModel)ltb.DataContext;
 
                 string dmlKeyword = inputBlockPropertiesViewModel.dmlKeyword;

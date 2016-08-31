@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,20 @@ namespace DrawArea
 {
     public class InputBlockPropertiesViewModel : ViewModelBase
     {
+        public InputBlockPropertiesViewModel()
+        {
+            this.PropertyChanged += MyViewModel_PropertyChanged;
+        }
+        void MyViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "SomeProperty":
+                    // Do something
+                    break;
+            }
+        }
+
         string id;
         public string ID
         {
