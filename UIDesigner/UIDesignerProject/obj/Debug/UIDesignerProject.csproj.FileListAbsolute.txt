@@ -187,12 +187,10 @@ C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UI
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\UIDesignerProject\bin\Debug\zh-Hant\Microsoft.Expression.Interactions.resources.dll
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\UIDesignerProject\obj\Debug\UIDesignerProject.csprojResolveAssemblyReference.cache
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\UIDesignerProject\obj\Debug\LabelTextBox\LabelTextBox.baml
-C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\UIDesignerProject\obj\Debug\ToolBox\ToolBox.baml
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\UIDesignerProject\obj\Debug\InputBlockProperties\InputBlockProperties.g.cs
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\UIDesignerProject\obj\Debug\LabelTextBox\LabelTextBox.g.cs
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\UIDesignerProject\obj\Debug\DrawArea\DrawAreaView.g.cs
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\UIDesignerProject\obj\Debug\OutputBlockProperties\OutputBlockProperties.g.cs
-C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\UIDesignerProject\obj\Debug\ToolBox\ToolBox.g.cs
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\UIDesignerProject\obj\Debug\App.g.cs
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\UIDesignerProject\obj\Debug\GeneratedInternalTypeHelper.g.cs
 C:\Users\rkatiyar\Documents\Visual Studio 2013\Projects\UIDesigner-Repository\UIDesigner\UIDesignerProject\obj\Debug\DrawArea_MarkupCompile.cache

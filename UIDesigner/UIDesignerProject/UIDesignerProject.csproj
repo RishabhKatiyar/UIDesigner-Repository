@@ -128,9 +128,6 @@
     <Compile Include="OutputBlockProperties\OutputBlockProperties.xaml.cs">
       <DependentUpon>OutputBlockProperties.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ToolBox\ToolBox.xaml.cs">
-      <DependentUpon>ToolBox.xaml</DependentUpon>
-    </Compile>
     <Page Include="InputBlockProperties\InputBlockProperties.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -155,10 +152,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="OutputBlockProperties\OutputBlockProperties.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ToolBox\ToolBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

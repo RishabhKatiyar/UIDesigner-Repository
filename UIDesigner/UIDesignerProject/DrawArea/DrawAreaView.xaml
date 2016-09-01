@@ -12,7 +12,14 @@
         <StackPanel DockPanel.Dock="Bottom" Background="#FF007ACC">
             <Label DockPanel.Dock="Bottom" Background="#FF007ACC" Foreground="White" HorizontalAlignment="Right">© Rè</Label>
         </StackPanel>
-        <View:ToolBox DockPanel.Dock="Left" BorderBrush="#FF293955" BorderThickness="3,1,3,3"/>
+        <Border DockPanel.Dock="Left" BorderBrush="#FF293A56" BorderThickness="3,1,3,3">
+            <StackPanel>
+                <Label Background="#FF293A56" Foreground="White">Toolbox</Label>
+                <RadioButton Command ="{Binding toolBoxCommand}" CommandParameter="{Binding inputBlock}" Content="{Binding inputBlock}" Margin="1,0,5,0" IsChecked="True"/>
+                <RadioButton Command ="{Binding toolBoxCommand}" CommandParameter="{Binding outputBlock}" Content="{Binding outputBlock}" Margin="1,0,5,0"/>
+                <RadioButton Command ="{Binding toolBoxCommand}" CommandParameter="{Binding pauseBlock}" Content="{Binding pauseBlock}" Margin="1,0,5,0"/>
+            </StackPanel>
+        </Border>
         <Border DockPanel.Dock="Right" BorderBrush="#FF293A56" BorderThickness="3,1,3,3">
             <StackPanel >
                 <Label Background="#FF293955" Foreground="White">Properties</Label>

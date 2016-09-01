@@ -25,4 +25,16 @@
         public const string Target = "/TARGET=";
         public const string Source = "/SOURCE=";
     }
+
+    static public class DMLUIElementName
+    {
+        public const string InputBlock = "Input Block";
+        public const string OutputBlock = "Output Block";
+        public const string Text = "Text";
+        public const string Line = "Line";
+        public const string ItemBlock = "Item Block";
+        public const string MenuBlock = "Menu Block";
+        public const string PauseBlock = "Pause Block";
+        public const string YesNoBlock = "YesNo Block";
+    }
 }

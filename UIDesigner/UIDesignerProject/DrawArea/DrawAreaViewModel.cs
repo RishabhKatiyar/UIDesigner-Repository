@@ -1,6 +1,7 @@
 ﻿using DrawAreaToJSON;
 using GalaSoft.MvvmLight.Command;
 using JsonToDML;
+using Microsoft.Practices.Prism.Commands;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -21,12 +22,17 @@ namespace DrawArea
         {
             GridHeight = HEIGHT;
             GridWidth = WIDTH;
-            
+
+            inputBlock = JsonToDML.DMLUIElementName.InputBlock;
+            outputBlock = JsonToDML.DMLUIElementName.OutputBlock;
+            pauseBlock = JsonToDML.DMLUIElementName.PauseBlock;
+            currentBlockType = JsonToDML.DMLUIElementSyntax.InputBlock;
+
             CreateFileWatcher();
 
             inputBlockPropertiesViewModel = new InputBlockPropertiesViewModel();
             inputBlockPropertiesViewModel.inputBlockVisibility = Visibility.Hidden;
-            
+
             PropertyChanged += (obj, args) =>
             { System.Console.WriteLine("Property " + args.PropertyName + " changed"); };
 
@@ -34,12 +40,12 @@ namespace DrawArea
             _timer = new System.Timers.Timer();
             //_timer.AutoReset = false;
             //interval set to 1 second
-            _timer.Interval = 1000;
-            _timer.Elapsed += timer_Elapsed;
+            _timer.Interval = 100;
+            _timer.Elapsed += timerElapsed;
             _timer.Start();
         }
 
-        private void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        private void timerElapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             if (_oldRow != inputBlockPropertiesViewModel.Row || _oldCol != inputBlockPropertiesViewModel.Col)
             {
@@ -67,6 +73,7 @@ namespace DrawArea
                 private System.Timers.Timer _timer;
                 string _oldRow;
                 string _oldCol;
+                string currentBlockType;
             #endregion
 
             #region properties
@@ -82,6 +89,48 @@ namespace DrawArea
                         {
                             _inputBlockPropertiesViewModel = value;
                             RaisePropertyChangedEvent("inputBlockPropertiesViewModel");
+                        }
+                    }
+                }
+
+                string _inputBlock;
+                public string inputBlock
+                {
+                    get { return _inputBlock; }
+                    set
+                    {
+                        if (_inputBlock != value)
+                        {
+                            _inputBlock = value;
+                            RaisePropertyChangedEvent("inputBlock");
+                        }
+                    }
+                }
+
+                string _outputBlock;
+                public string outputBlock
+                {
+                    get { return _outputBlock; }
+                    set
+                    {
+                        if (_outputBlock != value)
+                        {
+                            _outputBlock = value;
+                            RaisePropertyChangedEvent("outputBlock");
+                        }
+                    }
+                }
+
+                string _pauseBlock;
+                public string pauseBlock
+                {
+                    get { return _pauseBlock; }
+                    set
+                    {
+                        if (_pauseBlock != value)
+                        {
+                            _pauseBlock = value;
+                            RaisePropertyChangedEvent("pauseBlock");
                         }
                     }
                 }
@@ -132,6 +181,25 @@ namespace DrawArea
                     getGridRowCol(mousePos.X, mousePos.Y);
                     createBlock(selectedRowIndex, selectedColumnIndex, 4, 1);
                 }
+
+                private RelayCommand<string> _toolBoxCommand;
+                public RelayCommand<string> toolBoxCommand
+                {
+                    get { return _toolBoxCommand ?? (_toolBoxCommand = new RelayCommand<string>(toolBoxFun)); }
+                }
+
+                private void toolBoxFun(string blockName)
+                {
+                    switch(blockName)
+                    {
+                        case JsonToDML.DMLUIElementName.InputBlock: currentBlockType = JsonToDML.DMLUIElementSyntax.InputBlock;
+                            break;
+                        case JsonToDML.DMLUIElementName.OutputBlock: currentBlockType = JsonToDML.DMLUIElementSyntax.OutputBlock;
+                            break;
+                        case JsonToDML.DMLUIElementName.PauseBlock: currentBlockType = JsonToDML.DMLUIElementSyntax.PauseBlock;
+                            break;
+                    }
+                }
             
             #endregion
 
@@ -166,56 +234,59 @@ namespace DrawArea
             }
             private void createBlock(int row, int col, int blockWidth, int blockHeight)
             {
-                InputBlockPropertiesViewModel ob = new InputBlockPropertiesViewModel();
+                if (currentBlockType == JsonToDML.DMLUIElementSyntax.InputBlock)
+                {
+                    InputBlockPropertiesViewModel ob = new InputBlockPropertiesViewModel();
                 
-                int numberOfBlocksLabel;
-                int numberOfBlocksBox;
-                LabelTextBox ltb = new LabelTextBox();
-                ltb.DataContext = ob;
+                    int numberOfBlocksLabel;
+                    int numberOfBlocksBox;
+                    LabelTextBox ltb = new LabelTextBox();
+                    ltb.DataContext = ob;
 
-                uid++;
-                ob.ID = uid.ToString();
-                ob.Row = row.ToString();
-                ob.Col = col.ToString();
-                ob.dmlKeyword = "INPUT_BLOCK";
-                ltb.txb.Text = "Label";
+                    uid++;
+                    ob.ID = uid.ToString();
+                    ob.Row = row.ToString();
+                    ob.Col = col.ToString();
+                    ob.dmlKeyword = currentBlockType;
+                    ltb.txb.Text = "Label";
              
-                Size s = MeasureTextSize(ltb.txb.Text, ltb);
-                numberOfBlocksLabel = (int)Math.Ceiling((double)(Math.Ceiling(s.Width) / WIDTH));
-                numberOfBlocksBox = blockWidth - numberOfBlocksLabel;
+                    Size s = MeasureTextSize(ltb.txb.Text, ltb);
+                    numberOfBlocksLabel = (int)Math.Ceiling((double)(Math.Ceiling(s.Width) / WIDTH));
+                    numberOfBlocksBox = blockWidth - numberOfBlocksLabel;
 
-                ltb.Width = blockWidth * WIDTH;
-                ltb.Height = blockHeight * HEIGHT;
+                    ltb.Width = blockWidth * WIDTH;
+                    ltb.Height = blockHeight * HEIGHT;
 
-                ltb.txb.Width = WIDTH * numberOfBlocksLabel;
-                ltb.txb.Height = HEIGHT * blockHeight;
+                    ltb.txb.Width = WIDTH * numberOfBlocksLabel;
+                    ltb.txb.Height = HEIGHT * blockHeight;
 
-                ltb.txt.Width = WIDTH * numberOfBlocksBox;
-                ltb.txt.Height = HEIGHT * blockHeight;
+                    ltb.txt.Width = WIDTH * numberOfBlocksBox;
+                    ltb.txt.Height = HEIGHT * blockHeight;
 
-                ltb.txt.BorderBrush = Brushes.Red;
-                ltb.txt.BorderThickness = new Thickness(2, 2, 2, 2);
+                    ltb.txt.BorderBrush = Brushes.Red;
+                    ltb.txt.BorderThickness = new Thickness(2, 2, 2, 2);
 
-                ltb.txt.TextChanged += blockTextChange;
-                ltb.PreviewKeyDown += selectInputBlock;
-                ltb.PreviewMouseDown += mouseClickInputBlock;
+                    ltb.txt.TextChanged += blockTextChange;
+                    ltb.PreviewKeyDown += selectInputBlock;
+                    ltb.PreviewMouseDown += mouseClickInputBlock;
 
-                Grid.SetRow(ltb, row);
-                Grid.SetColumn(ltb, col - numberOfBlocksLabel);
-                Grid.SetColumnSpan(ltb, ((int)(ltb.Width) / WIDTH));
-                Grid.SetRowSpan(ltb, ((int)(ltb.Height) / HEIGHT));
-                MyGrid.Children.Add(ltb);
+                    Grid.SetRow(ltb, row);
+                    Grid.SetColumn(ltb, col - numberOfBlocksLabel);
+                    Grid.SetColumnSpan(ltb, ((int)(ltb.Width) / WIDTH));
+                    Grid.SetRowSpan(ltb, ((int)(ltb.Height) / HEIGHT));
+                    MyGrid.Children.Add(ltb);
 
-                var blockName = "BLOCK";
-                blockNameCount = blockNameCount + 1;
-                blockName = "BLOCK_" + blockNameCount;
+                    var blockName = "BLOCK";
+                    blockNameCount = blockNameCount + 1;
+                    blockName = "BLOCK_" + blockNameCount;
 
-                daElement = new DrawAreaUiElement(ob.ID, "INPUT_BLOCK", ob.Row.ToString(), ob.Col.ToString(), blockName, "TOKEN", "", "#TARGET", "#SOURCE", "", ltb.txt.Width.ToString(), "12", ltb.txt.Height.ToString());
-                daList.addUIElementToUIElementList(daElement);
-                DrawToJSON.DrawAreaToJSON(daList.UIL);
+                    daElement = new DrawAreaUiElement(ob.ID, currentBlockType, ob.Row.ToString(), ob.Col.ToString(), blockName, "TOKEN", "", "#TARGET", "#SOURCE", "", ltb.txt.Width.ToString(), "12", ltb.txt.Height.ToString());
+                    daList.addUIElementToUIElementList(daElement);
+                    DrawToJSON.DrawAreaToJSON(daList.UIL);
 
-                inputBlockPropertiesViewModel = ob;
-                viewModelList.Add(ob);
+                    inputBlockPropertiesViewModel = ob;
+                    viewModelList.Add(ob);
+                }
             }
             private void blockTextChange(object sender, RoutedEventArgs e)
             {
@@ -355,13 +426,13 @@ namespace DrawArea
                 inputBlockPropertiesViewModel = (InputBlockPropertiesViewModel)ltb.DataContext;
 
                 string dmlKeyword = inputBlockPropertiesViewModel.dmlKeyword;
-                if (dmlKeyword == "INPUT_BLOCK")
+                if (dmlKeyword == JsonToDML.DMLUIElementSyntax.InputBlock)
                 {
                     inputBlockPropertiesViewModel.inputBlockVisibility = Visibility.Visible;
                     //inputBlockPropertiesViewModel.outputBlockVisibility = Visibility.Hidden;
                    
                 }
-                else if (dmlKeyword == "OUTPUT_BLOCK")
+                else if (dmlKeyword == JsonToDML.DMLUIElementSyntax.OutputBlock)
                 {
                     inputBlockPropertiesViewModel.inputBlockVisibility = Visibility.Hidden;
                     //outputBlockVisibility = Visibility.Visible;
