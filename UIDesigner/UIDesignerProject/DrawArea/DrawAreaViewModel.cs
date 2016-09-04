@@ -31,30 +31,17 @@ namespace DrawArea
             CreateFileWatcher();
 
             inputBlockPropertiesViewModel = new InputBlockPropertiesViewModel();
+            inputBlockPropertiesViewModel.OnParameterChange += ParameterViewModel_OnParameterChange;
             inputBlockPropertiesViewModel.inputBlockVisibility = Visibility.Hidden;
-
-            PropertyChanged += (obj, args) =>
-            { System.Console.WriteLine("Property " + args.PropertyName + " changed"); };
-
-            _oldRow = inputBlockPropertiesViewModel.Row;
-            _timer = new System.Timers.Timer();
-            //_timer.AutoReset = false;
-            //interval set to 1 second
-            _timer.Interval = 100;
-            _timer.Elapsed += timerElapsed;
-            _timer.Start();
         }
-
-        private void timerElapsed(object sender, System.Timers.ElapsedEventArgs e)
+        public void ParameterViewModel_OnParameterChange(string parameterName)
         {
             if (_oldRow != inputBlockPropertiesViewModel.Row || _oldCol != inputBlockPropertiesViewModel.Col)
             {
                 _oldRow = inputBlockPropertiesViewModel.Row;
                 _oldCol = inputBlockPropertiesViewModel.Col;
-                Application.Current.Dispatcher.Invoke(() => readPropertiesAndModifyUIElement());
+                readPropertiesAndModifyUIElement();
             }
-            //because we did _timer.AutoReset = false; we need to manually restart the timer.
-            _timer.Start();
         }
 
         #region drawArea
@@ -237,6 +224,7 @@ namespace DrawArea
                 if (currentBlockType == JsonToDML.DMLUIElementSyntax.InputBlock)
                 {
                     InputBlockPropertiesViewModel ob = new InputBlockPropertiesViewModel();
+                    ob.OnParameterChange += ParameterViewModel_OnParameterChange;
                 
                     int numberOfBlocksLabel;
                     int numberOfBlocksBox;
@@ -267,7 +255,7 @@ namespace DrawArea
                     ltb.txt.BorderThickness = new Thickness(2, 2, 2, 2);
 
                     ltb.txt.TextChanged += blockTextChange;
-                    ltb.PreviewKeyDown += selectInputBlock;
+                    ltb.PreviewKeyDown += selectBlock;
                     ltb.PreviewMouseDown += mouseClickInputBlock;
 
                     Grid.SetRow(ltb, row);
@@ -314,10 +302,9 @@ namespace DrawArea
                     }
                 }
             }
-            private void selectInputBlock(object sender, KeyEventArgs e)
+            private void selectBlock(object sender, KeyEventArgs e)
             {
                 LabelTextBox ltb = (LabelTextBox)sender;
-                //LTB = ltb;
                 inputBlockPropertiesViewModel = (InputBlockPropertiesViewModel)ltb.DataContext;
 
                 int blockWidth = (int)ltb.Width;
@@ -325,7 +312,7 @@ namespace DrawArea
                 int boxWidth = (int)ltb.txt.Width;
                 int boxHeight = (int)ltb.txt.Height;
                 int widthDiff = blockWidth - boxWidth;
-                
+
                 int blockRow = int.Parse(inputBlockPropertiesViewModel.Row);
                 int blockCol = int.Parse(inputBlockPropertiesViewModel.Col);
 
@@ -430,7 +417,6 @@ namespace DrawArea
                 {
                     inputBlockPropertiesViewModel.inputBlockVisibility = Visibility.Visible;
                     //inputBlockPropertiesViewModel.outputBlockVisibility = Visibility.Hidden;
-                   
                 }
                 else if (dmlKeyword == JsonToDML.DMLUIElementSyntax.OutputBlock)
                 {

@@ -10,6 +10,25 @@ namespace DrawArea
 {
     public class InputBlockPropertiesViewModel : ViewModelBase
     {
+        public delegate void ParameterChange(string parameterName);
+        
+        ParameterChange onParameterChange;
+        public ParameterChange OnParameterChange 
+        {
+            get 
+            { 
+                return onParameterChange; 
+            }
+            set
+            {
+                if (onParameterChange != value)
+                {
+                    onParameterChange = value;
+                    RaisePropertyChangedEvent("OnParameterChange");
+                }
+            } 
+        }
+
         string id;
         public string ID
         {
@@ -36,6 +55,10 @@ namespace DrawArea
                 {
                     row = value;
                     RaisePropertyChangedEvent("Row");
+                    if (OnParameterChange != null)
+                    {
+                        OnParameterChange("Row");
+                    }
                 }
             }
         }
@@ -50,7 +73,11 @@ namespace DrawArea
                 if (col != value)
                 {
                     col = value;
-                    RaisePropertyChangedEvent("Col");
+                    RaisePropertyChangedEvent("Col"); 
+                    if (OnParameterChange != null)
+                    {
+                        OnParameterChange("Col");
+                    }
                 }
             }
         }
