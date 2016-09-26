@@ -31,16 +31,30 @@ namespace DrawArea
             CreateFileWatcher();
 
             inputBlockPropertiesViewModel = new InputBlockPropertiesViewModel();
-            inputBlockPropertiesViewModel.OnParameterChange += ParameterViewModel_OnParameterChange;
+            inputBlockPropertiesViewModel.OnParameterChange += ParameterViewModel_OnParameterChange_Input;
             inputBlockPropertiesViewModel.inputBlockVisibility = Visibility.Hidden;
+
+            outputBlockPropertiesViewModel = new OutputBlockPropertiesViewModel();
+            outputBlockPropertiesViewModel.OnParameterChange += ParameterViewModel_OnParameterChange_Output;
+            outputBlockPropertiesViewModel.outputBlockVisibility = Visibility.Hidden;
         }
-        public void ParameterViewModel_OnParameterChange(string parameterName)
+        public void ParameterViewModel_OnParameterChange_Input(string parameterName)
         {
             if (_oldRow != inputBlockPropertiesViewModel.Row || _oldCol != inputBlockPropertiesViewModel.Col)
             {
                 _oldRow = inputBlockPropertiesViewModel.Row;
                 _oldCol = inputBlockPropertiesViewModel.Col;
-                readPropertiesAndModifyUIElement();
+                readPropertiesAndModifyUIElement(JsonToDML.DMLUIElementSyntax.InputBlock);
+            }
+        }
+
+        public void ParameterViewModel_OnParameterChange_Output(string parameterName)
+        {
+            if (_oldRow != outputBlockPropertiesViewModel.Row || _oldCol != outputBlockPropertiesViewModel.Col)
+            {
+                _oldRow = outputBlockPropertiesViewModel.Row;
+                _oldCol = outputBlockPropertiesViewModel.Col;
+                readPropertiesAndModifyUIElement(JsonToDML.DMLUIElementSyntax.OutputBlock);
             }
         }
 
@@ -56,8 +70,8 @@ namespace DrawArea
                 int uid = 0;
                 DrawAreaUiElementList daList = new DrawAreaUiElementList();
                 List<InputBlockPropertiesViewModel> viewModelList = new List<InputBlockPropertiesViewModel>();
+                List<OutputBlockPropertiesViewModel> viewModelOutputList = new List<OutputBlockPropertiesViewModel>();        
                 DrawAreaUiElement daElement;
-                private System.Timers.Timer _timer;
                 string _oldRow;
                 string _oldCol;
                 string currentBlockType;
@@ -76,6 +90,21 @@ namespace DrawArea
                         {
                             _inputBlockPropertiesViewModel = value;
                             RaisePropertyChangedEvent("inputBlockPropertiesViewModel");
+                        }
+                    }
+                }
+
+                OutputBlockPropertiesViewModel _outputBlockPropertiesViewModel;
+                public OutputBlockPropertiesViewModel outputBlockPropertiesViewModel
+                {
+                    get
+                    { return _outputBlockPropertiesViewModel; }
+                    set
+                    {
+                        if (_outputBlockPropertiesViewModel != value)
+                        {
+                            _outputBlockPropertiesViewModel = value;
+                            RaisePropertyChangedEvent("outputBlockPropertiesViewModel");
                         }
                     }
                 }
@@ -224,7 +253,7 @@ namespace DrawArea
                 if (currentBlockType == JsonToDML.DMLUIElementSyntax.InputBlock)
                 {
                     InputBlockPropertiesViewModel ob = new InputBlockPropertiesViewModel();
-                    ob.OnParameterChange += ParameterViewModel_OnParameterChange;
+                    ob.OnParameterChange += ParameterViewModel_OnParameterChange_Input;
                 
                     int numberOfBlocksLabel;
                     int numberOfBlocksBox;
@@ -255,7 +284,7 @@ namespace DrawArea
                     ltb.txt.BorderThickness = new Thickness(2, 2, 2, 2);
 
                     ltb.txt.TextChanged += blockTextChange;
-                    ltb.PreviewKeyDown += selectBlock;
+                    ltb.PreviewKeyDown += selectInputBlock;
                     ltb.PreviewMouseDown += mouseClickInputBlock;
 
                     Grid.SetRow(ltb, row);
@@ -274,6 +303,64 @@ namespace DrawArea
 
                     inputBlockPropertiesViewModel = ob;
                     viewModelList.Add(ob);
+                    inputBlockPropertiesViewModel.inputBlockVisibility = Visibility.Visible;
+                    outputBlockPropertiesViewModel.outputBlockVisibility = Visibility.Collapsed;
+                }
+                else if (currentBlockType == JsonToDML.DMLUIElementSyntax.OutputBlock)
+                {
+                    OutputBlockPropertiesViewModel ob = new OutputBlockPropertiesViewModel();
+                    ob.OnParameterChange += ParameterViewModel_OnParameterChange_Output;
+
+                    int numberOfBlocksLabel;
+                    int numberOfBlocksBox;
+                    LabelTextBox ltb = new LabelTextBox();
+                    ltb.DataContext = ob;
+
+                    uid++;
+                    ob.ID = uid.ToString();
+                    ob.Row = row.ToString();
+                    ob.Col = col.ToString();
+                    ob.dmlKeyword = currentBlockType;
+                    ltb.txb.Text = "Label";
+
+                    Size s = MeasureTextSize(ltb.txb.Text, ltb);
+                    numberOfBlocksLabel = (int)Math.Ceiling((double)(Math.Ceiling(s.Width) / WIDTH));
+                    numberOfBlocksBox = blockWidth - numberOfBlocksLabel;
+
+                    ltb.Width = blockWidth * WIDTH;
+                    ltb.Height = blockHeight * HEIGHT;
+
+                    ltb.txb.Width = WIDTH * numberOfBlocksLabel;
+                    ltb.txb.Height = HEIGHT * blockHeight;
+
+                    ltb.txt.Width = WIDTH * numberOfBlocksBox;
+                    ltb.txt.Height = HEIGHT * blockHeight;
+
+                    ltb.txt.BorderBrush = Brushes.Red;
+                    ltb.txt.BorderThickness = new Thickness(2, 2, 2, 2);
+
+                    ltb.txt.TextChanged += blockTextChange;
+                    ltb.PreviewKeyDown += selectOutputBlock;
+                    ltb.PreviewMouseDown += mouseClickOutputBlock;
+
+                    Grid.SetRow(ltb, row);
+                    Grid.SetColumn(ltb, col - numberOfBlocksLabel);
+                    Grid.SetColumnSpan(ltb, ((int)(ltb.Width) / WIDTH));
+                    Grid.SetRowSpan(ltb, ((int)(ltb.Height) / HEIGHT));
+                    MyGrid.Children.Add(ltb);
+
+                    var blockName = "BLOCK";
+                    blockNameCount = blockNameCount + 1;
+                    blockName = "BLOCK_" + blockNameCount;
+
+                    daElement = new DrawAreaUiElement(ob.ID, currentBlockType, ob.Row.ToString(), ob.Col.ToString(), blockName, "TOKEN", "", "#TARGET", "#SOURCE", "", ltb.txt.Width.ToString(), "12", ltb.txt.Height.ToString());
+                    daList.addUIElementToUIElementList(daElement);
+                    DrawToJSON.DrawAreaToJSON(daList.UIL);
+
+                    outputBlockPropertiesViewModel = ob;
+                    viewModelOutputList.Add(ob);
+                    inputBlockPropertiesViewModel.inputBlockVisibility = Visibility.Collapsed;
+                    outputBlockPropertiesViewModel.outputBlockVisibility = Visibility.Visible;
                 }
             }
             private void blockTextChange(object sender, RoutedEventArgs e)
@@ -282,27 +369,50 @@ namespace DrawArea
                 ltb.txt = (TextBox)sender;
                 ltb.txb.Text = ltb.txt.Text;
             }
-            public void readPropertiesAndModifyUIElement()
+            public void readPropertiesAndModifyUIElement(string blockType)
             {
-                var ob = inputBlockPropertiesViewModel;
-                if (MyGrid != null)
+                if (blockType == JsonToDML.DMLUIElementSyntax.InputBlock)
                 {
-                    foreach (LabelTextBox child in MyGrid.Children)
+                    var ob = inputBlockPropertiesViewModel;
+                    if (MyGrid != null)
                     {
-                        if (child.DataContext == ob)
+                        foreach (LabelTextBox child in MyGrid.Children)
                         {
-                            Grid.SetRow(child, int.Parse(inputBlockPropertiesViewModel.Row));
-                            int blockWidth = (int)child.Width;
-                            int boxWidth = (int)child.txt.Width;
-                            int widthDiff = blockWidth - boxWidth;
-                            int calculatedCol = int.Parse(inputBlockPropertiesViewModel.Col) - ((widthDiff / WIDTH));
-                            Grid.SetColumn(child, calculatedCol);
-                            modifyElement(inputBlockPropertiesViewModel.ID, "", int.Parse(inputBlockPropertiesViewModel.Row), int.Parse(inputBlockPropertiesViewModel.Col), 0, 0);
+                            if (child.DataContext == ob)
+                            {
+                                Grid.SetRow(child, int.Parse(inputBlockPropertiesViewModel.Row));
+                                int blockWidth = (int)child.Width;
+                                int boxWidth = (int)child.txt.Width;
+                                int widthDiff = blockWidth - boxWidth;
+                                int calculatedCol = int.Parse(inputBlockPropertiesViewModel.Col) - ((widthDiff / WIDTH));
+                                Grid.SetColumn(child, calculatedCol);
+                                modifyElement(inputBlockPropertiesViewModel.ID, "", int.Parse(inputBlockPropertiesViewModel.Row), int.Parse(inputBlockPropertiesViewModel.Col), 0, 0);
+                            }
+                        }
+                    }
+                }
+                else if (blockType == JsonToDML.DMLUIElementSyntax.OutputBlock)
+                {
+                    var ob = outputBlockPropertiesViewModel;
+                    if (MyGrid != null)
+                    {
+                        foreach (LabelTextBox child in MyGrid.Children)
+                        {
+                            if (child.DataContext == ob)
+                            {
+                                Grid.SetRow(child, int.Parse(outputBlockPropertiesViewModel.Row));
+                                int blockWidth = (int)child.Width;
+                                int boxWidth = (int)child.txt.Width;
+                                int widthDiff = blockWidth - boxWidth;
+                                int calculatedCol = int.Parse(outputBlockPropertiesViewModel.Col) - ((widthDiff / WIDTH));
+                                Grid.SetColumn(child, calculatedCol);
+                                modifyElement(outputBlockPropertiesViewModel.ID, "", int.Parse(outputBlockPropertiesViewModel.Row), int.Parse(outputBlockPropertiesViewModel.Col), 0, 0);
+                            }
                         }
                     }
                 }
             }
-            private void selectBlock(object sender, KeyEventArgs e)
+            private void selectInputBlock(object sender, KeyEventArgs e)
             {
                 LabelTextBox ltb = (LabelTextBox)sender;
                 inputBlockPropertiesViewModel = (InputBlockPropertiesViewModel)ltb.DataContext;
@@ -407,6 +517,111 @@ namespace DrawArea
                 Grid.SetRowSpan(((LabelTextBox)sender).txt, boxHeight / HEIGHT);
                 modifyElement(inputBlockPropertiesViewModel.ID, "", 0, 0, boxWidth, boxHeight);
             }
+            private void selectOutputBlock(object sender, KeyEventArgs e)
+            {
+                LabelTextBox ltb = (LabelTextBox)sender;
+                outputBlockPropertiesViewModel = (OutputBlockPropertiesViewModel)ltb.DataContext;
+
+                int blockWidth = (int)ltb.Width;
+                int blockHeight = (int)ltb.Height;
+                int boxWidth = (int)ltb.txt.Width;
+                int boxHeight = (int)ltb.txt.Height;
+                int widthDiff = blockWidth - boxWidth;
+
+                int blockRow = int.Parse(outputBlockPropertiesViewModel.Row);
+                int blockCol = int.Parse(outputBlockPropertiesViewModel.Col);
+
+                if (e.Key == Key.Delete)
+                {
+                    MyGrid.Children.Remove(ltb);
+                    modifyElement(outputBlockPropertiesViewModel.ID, "DELETE", 0, 0, 0, 0);
+                    return;
+                }
+
+                if ((Keyboard.IsKeyDown(Key.RightCtrl)) && (Keyboard.IsKeyDown(Key.Up)))
+                {
+                    blockRow -= 1;
+                    Grid.SetRow(ltb, blockRow);
+                    outputBlockPropertiesViewModel.Row = blockRow.ToString();
+                    modifyElement(outputBlockPropertiesViewModel.ID, "", blockRow, 0, 0, 0);
+                    return;
+                }
+
+                if ((Keyboard.IsKeyDown(Key.RightCtrl)) && (Keyboard.IsKeyDown(Key.Down)))
+                {
+                    blockRow += 1;
+                    Grid.SetRow(ltb, blockRow);
+                    outputBlockPropertiesViewModel.Row = blockRow.ToString();
+                    modifyElement(outputBlockPropertiesViewModel.ID, "", blockRow, 0, 0, 0);
+                    return;
+                }
+
+                if ((Keyboard.IsKeyDown(Key.RightCtrl)) && (Keyboard.IsKeyDown(Key.Left)))
+                {
+                    blockCol -= ((widthDiff / WIDTH) + 1);
+                    Grid.SetColumn(ltb, blockCol);
+                    int tempCol = int.Parse(outputBlockPropertiesViewModel.Col) - 1;
+                    outputBlockPropertiesViewModel.Col = tempCol.ToString();
+                    modifyElement(outputBlockPropertiesViewModel.ID, "", 0, tempCol, 0, 0);
+
+                    return;
+                }
+
+                if ((Keyboard.IsKeyDown(Key.RightCtrl)) && (Keyboard.IsKeyDown(Key.Right)))
+                {
+                    blockCol += (-(widthDiff / WIDTH) + 1);
+                    //blockCol += 1;
+                    Grid.SetColumn(ltb, blockCol);
+                    int tempCol = int.Parse(outputBlockPropertiesViewModel.Col) + 1;
+                    outputBlockPropertiesViewModel.Col = tempCol.ToString();
+                    modifyElement(outputBlockPropertiesViewModel.ID, "", 0, tempCol, 0, 0);
+
+                    return;
+                }
+
+                if (e.Key == Key.Left)
+                {
+                    boxWidth -= WIDTH;
+                }
+                if (e.Key == Key.Right)
+                {
+                    boxWidth += WIDTH;
+                }
+                if (e.Key == Key.Up)
+                {
+                    boxHeight -= HEIGHT;
+                    blockHeight -= HEIGHT;
+                }
+                if (e.Key == Key.Down)
+                {
+                    boxHeight += WIDTH;
+                    blockHeight += WIDTH;
+                }
+                if (e.Key >= Key.A && e.Key <= Key.Z)
+                {
+                }
+
+                if (boxWidth <= 0)
+                    boxWidth = (int)ltb.txt.Width;
+                if (boxHeight <= 0 || blockHeight <= 0)
+                {
+                    blockHeight = (int)ltb.Height;
+                    boxHeight = (int)ltb.txt.Height;
+                }
+
+                ltb.Width = boxWidth + widthDiff;
+                ltb.Height = blockHeight;
+
+                Grid.SetColumnSpan(((LabelTextBox)sender), (boxWidth + widthDiff) / WIDTH);
+                Grid.SetRowSpan(((LabelTextBox)sender), blockHeight / HEIGHT);
+
+                ltb.txt.Width = boxWidth;
+                ltb.txt.Height = boxHeight;
+
+                Grid.SetColumnSpan(((LabelTextBox)sender).txt, boxWidth / WIDTH);
+                Grid.SetRowSpan(((LabelTextBox)sender).txt, boxHeight / HEIGHT);
+                modifyElement(outputBlockPropertiesViewModel.ID, "", 0, 0, boxWidth, boxHeight);
+            }
             private void mouseClickInputBlock(object sender, MouseEventArgs e)
             {
                 LabelTextBox ltb = (LabelTextBox)sender;
@@ -416,12 +631,19 @@ namespace DrawArea
                 if (dmlKeyword == JsonToDML.DMLUIElementSyntax.InputBlock)
                 {
                     inputBlockPropertiesViewModel.inputBlockVisibility = Visibility.Visible;
-                    //inputBlockPropertiesViewModel.outputBlockVisibility = Visibility.Hidden;
+                    outputBlockPropertiesViewModel.outputBlockVisibility = Visibility.Collapsed;
                 }
-                else if (dmlKeyword == JsonToDML.DMLUIElementSyntax.OutputBlock)
+            }
+            private void mouseClickOutputBlock(object sender, MouseEventArgs e)
+            {
+                LabelTextBox ltb = (LabelTextBox)sender;
+                outputBlockPropertiesViewModel = (OutputBlockPropertiesViewModel)ltb.DataContext;
+
+                string dmlKeyword = outputBlockPropertiesViewModel.dmlKeyword;
+                if (dmlKeyword == JsonToDML.DMLUIElementSyntax.OutputBlock)
                 {
-                    inputBlockPropertiesViewModel.inputBlockVisibility = Visibility.Hidden;
-                    //outputBlockVisibility = Visibility.Visible;
+                    inputBlockPropertiesViewModel.inputBlockVisibility = Visibility.Collapsed;
+                    outputBlockPropertiesViewModel.outputBlockVisibility = Visibility.Visible;
                 }
             }
             public void modifyElement(string blockId, string mode, int row, int col, int len, int height)

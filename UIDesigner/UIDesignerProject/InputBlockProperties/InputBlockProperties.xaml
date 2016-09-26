@@ -15,31 +15,34 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="150"/>
         </Grid.ColumnDefinitions>
 
-        <Label Grid.Row="0" Grid.Column="0" HorizontalContentAlignment="Left">ID</Label>
-        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ID, Mode=TwoWay}" IsEnabled="False"/>
+        <Label Grid.Row="0" Grid.Column="0" HorizontalContentAlignment="Left">Input Block</Label>
 
-        <Label Grid.Row="1" Grid.Column="0" HorizontalContentAlignment="Left">Block Name</Label>
-        <TextBox Grid.Row="1" Grid.Column="1"/>
+        <Label Grid.Row="1" Grid.Column="0" HorizontalContentAlignment="Left">ID</Label>
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ID, Mode=TwoWay}" IsEnabled="False"/>
 
-        <Label Grid.Row="2" Grid.Column="0" HorizontalContentAlignment="Left">Row</Label>
-        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Row, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <Label Grid.Row="2" Grid.Column="0" HorizontalContentAlignment="Left">Block Name</Label>
+        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding blockName, Mode=TwoWay}"/>
 
-        <Label Grid.Row="3" Grid.Column="0" HorizontalContentAlignment="Left">Column</Label>
-        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Col, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <Label Grid.Row="3" Grid.Column="0" HorizontalContentAlignment="Left">Row</Label>
+        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Row, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-        <Label Grid.Row="4" Grid.Column="0" HorizontalContentAlignment="Left">Prompt</Label>
-        <TextBox Grid.Row="4" Grid.Column="1"></TextBox>
+        <Label Grid.Row="4" Grid.Column="0" HorizontalContentAlignment="Left">Column</Label>
+        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Col, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-        <Label Grid.Row="5" Grid.Column="0" HorizontalContentAlignment="Left">Target</Label>
+        <Label Grid.Row="5" Grid.Column="0" HorizontalContentAlignment="Left">Prompt</Label>
         <TextBox Grid.Row="5" Grid.Column="1"></TextBox>
 
-        <Label Grid.Row="6" Grid.Column="0" HorizontalContentAlignment="Left">Using</Label>
+        <Label Grid.Row="6" Grid.Column="0" HorizontalContentAlignment="Left">Target</Label>
         <TextBox Grid.Row="6" Grid.Column="1"></TextBox>
+
+        <Label Grid.Row="7" Grid.Column="0" HorizontalContentAlignment="Left">Using</Label>
+        <TextBox Grid.Row="7" Grid.Column="1"></TextBox>
     </Grid>
 </UserControl>

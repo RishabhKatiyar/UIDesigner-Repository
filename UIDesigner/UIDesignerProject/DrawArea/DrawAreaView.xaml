@@ -24,7 +24,7 @@
             <StackPanel >
                 <Label Background="#FF293955" Foreground="White">Properties</Label>
                 <View:InputBlockProperties DataContext="{Binding inputBlockPropertiesViewModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <!--<View:OutputBlockProperties Visibility="{Binding outputBlockVisibility}"/>-->
+                <View:OutputBlockProperties DataContext="{Binding outputBlockPropertiesViewModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
         </Border>
         <DockPanel>
